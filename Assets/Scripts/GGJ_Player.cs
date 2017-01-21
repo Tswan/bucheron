@@ -3,15 +3,14 @@ using System.Collections;
 
 using UnityEngine;
 
-public class GGJ_Player : MonoBehaviour
+public class GGJ_Player : MonoBehaviour, IDamagable
 {
-    public int HitPoints { get; set; }
-    public Camera MainCamera { get; set; }
+	public Camera MainCamera;
 
     private int _currency;
     private DateTime _startTime;
 
-    void Awake()
+    private void Awake()
     {
         DontDestroyOnLoad(this);
     }
@@ -22,26 +21,26 @@ public class GGJ_Player : MonoBehaviour
     }
 
     private void Update()
-    {
-
+	{
+		MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = 1.0f;
     }
 
-    public void HurtPlayer(int damage)
+	public void OnDamage(int damage)
     {
+		// DEBUG: Log the damage
+		//Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
+
         // TODO: Play audio
 
-        // TODO: Shake camera
-
-        // Decrement health
-        HitPoints -= damage;
-        Debug.Log(string.Format("Damaging player by {0} points.", damage));
-        if (HitPoints >= 0)
-        {
-            // TODO: Kill player
-            Debug.Log("TODO: Kill player.");
-        }
-
         // Shake the camera for an amount of time dependant on the damage
-        MainCamera.GetComponent<CameraShake>().ShakeTime = damage * 0.1f;
+        MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
+
+	public void OnKill()
+	{
+		// DEBUG: Log killing player
+		Debug.Log("Player has been killed.");
+
+		// TODO: Handle player death
+	}
 }

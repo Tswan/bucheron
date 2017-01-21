@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraShake : MonoBehaviour
+public class GGJ_CameraShake : MonoBehaviour
 {
     // Transform of the camera to shake. Grabs the gameObject's transform
     // if null.
     public Transform CameraTransform { get; set; }
 
     // How long the object should shake for.
-    public float ShakeTime { get; set; }
+	public float ShakeTime;
 
     // Amplitude of the shake. A larger value shakes the camera harder.
-    public float ShakeIntensity { get; set; }
-    public float DecreaseFactor { get; set; }
+	public float ShakeIntensity;
+	public float DecreaseFactor;
 
     private Vector3 OriginalPosition;
 
