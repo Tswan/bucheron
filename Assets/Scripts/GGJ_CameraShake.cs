@@ -5,42 +5,42 @@ public class CameraShake : MonoBehaviour
 {
     // Transform of the camera to shake. Grabs the gameObject's transform
     // if null.
-    public Transform camTransform;
+    public Transform CameraTransform { get; set; }
 
     // How long the object should shake for.
-    public float shakeTime;
+    public float ShakeTime { get; set; }
 
     // Amplitude of the shake. A larger value shakes the camera harder.
-    public float shakeIntensity;
-    public float decreaseFactor;
+    public float ShakeIntensity { get; set; }
+    public float DecreaseFactor { get; set; }
 
-    Vector3 originalPos;
+    private Vector3 OriginalPosition;
 
     void Awake()
     {
-        if (camTransform == null)
+        if (CameraTransform == null)
         {
             //Defulat to self 
-            camTransform = transform;
+            CameraTransform = transform;
         }
     }
 
     void OnEnable()
     {
-        originalPos = camTransform.localPosition;
+        OriginalPosition = CameraTransform.localPosition;
     }
 
     void Update()
     {
-        if (shakeTime > 0)
+        if (ShakeTime > 0)
         {
-            camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeIntensity;
-            shakeTime -= Time.deltaTime * decreaseFactor;
+            CameraTransform.localPosition = OriginalPosition + Random.insideUnitSphere * ShakeIntensity;
+            ShakeTime -= Time.deltaTime * DecreaseFactor;
         }
         else
         {
-            shakeTime = 0f;
-            camTransform.localPosition = originalPos;
+            ShakeTime = 0f;
+            CameraTransform.localPosition = OriginalPosition;
         }
     }
 }
