@@ -8,6 +8,7 @@ public class GGJ_CameraShake : MonoBehaviour
     public Transform CameraTransform { get; set; }
 
     // How long the object should shake for.
+    [HideInInspector]
 	public float ShakeTime;
 
     // Amplitude of the shake. A larger value shakes the camera harder.
