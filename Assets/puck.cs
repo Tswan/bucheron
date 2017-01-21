@@ -16,6 +16,13 @@ public class puck : MonoBehaviour {
     public void shoot(float speed)
     {
         GetComponent<Rigidbody>().velocity = Vector3.right * speed;
+        StartCoroutine("life");
+    }
+
+    private IEnumerator life()
+    {
+        yield return new WaitForSeconds(3.0f);
+        Destroy(gameObject);
     }
 
 }
