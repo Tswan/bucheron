@@ -46,5 +46,6 @@ public class GGJ_Player : MonoBehaviour, IDamagable
         Debug.Log("TODO: Player audio for player dying.");
 
         // TODO: Handle player death
+        Debug.Log("TODO: Handle player death.");
     }
 }
