@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -22,7 +22,7 @@ public class GGJ_SwarmController : MonoBehaviour
     {
         // Check whether any of the enemy controllers can see any of the player
         GGJ_PlayerController moveToPlayerController = null;
-        foreach (var enemyController in Enemies)
+        foreach (var enemyController in Enemies.Where(obj => obj.RigidBody != null))
         {
             // Check whether the enemy can see the player by attempting to raycast to the player
             foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
