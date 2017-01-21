@@ -3,9 +3,11 @@ using System.Collections;
 
 public abstract class GGJ_BaseController : MonoBehaviour
 {
-    protected Stats Stats { get; private set; }
+    [HideInInspector]
+    public Stats Stats { get; private set; }
 
-    protected Rigidbody RigidBody { get; private set; }
+    [HideInInspector]
+    public Rigidbody RigidBody { get; private set; }
 
     protected virtual void Start()
     {

@@ -5,14 +5,25 @@ using UnityEngine;
 
 public class GGJ_EnemyController : GGJ_BaseController, IDamagable
 {
+    [HideInInspector]
+    public GGJ_PlayerController MoveToPlayerController { get; set; }
+
     public GameObject CurrencyDrop;
     public float MaxViewDistance;
-    
+
+    private int _collisionCount;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
     }
-    
+
+    protected override void Start()
+    {
+        base.Start();
+        _collisionCount = 0;
+    }
+
     public void OnDamage(GameObject other, int damage)
     {
         // TODO:
@@ -35,48 +46,50 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
         Destroy(gameObject);
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.GetComponent<GGJ_BaseController>() != null)
+        {
+            _collisionCount++;
+        }
+    }
+
+    private void OnCollisionStay(Collision other)
+    {
+        //_shouldMove = false;
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.GetComponent<GGJ_BaseController>() != null)
+        {
+            _collisionCount--;
+        }
+    }
+
     protected override Vector3 GetMovementDirection()
     {
-        // Check whether the enemy can see the player by attempting to raycast to the player
-        var finalDirection = Vector3.zero;
-        foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
+        // Check whether there's a player controller to move towards
+        if (MoveToPlayerController != null)
         {
             // Find direction between enemy and player
             var enemyPosition = RigidBody.transform.position;
-            var playerPosition = ggjPlayerController.GetComponent<Rigidbody>().transform.position;
+            var playerPosition = MoveToPlayerController.GetComponent<Rigidbody>().transform.position;
             var direction = playerPosition - enemyPosition;
 
-            // Cast a ray and check the result
+            // Check the distance between the enemy and any object between them and the player (including the player)
             var raycastHit = new RaycastHit();
-            if (Physics.Raycast(enemyPosition, direction, out raycastHit, MaxViewDistance))
+            var racastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
+            
+            // If we're too close to another object, don't move
+            if (_collisionCount <= 0 || !racastResult || raycastHit.collider.GetComponent<GGJ_PlayerController>() != null)
             {
-                var playerHit = raycastHit.collider.gameObject.GetComponent<GGJ_PlayerController>();
-                if (playerHit != null)
-                {
-                    // Check the distance
-                    if (raycastHit.distance > 2.5f)
-                    {
-                        // Move toward the player
-                        finalDirection = direction;
-                    }
-                    else
-                    {
-                        // Don't move
-                        finalDirection = Vector3.zero;
-                    }
-                    break;
-                }
+                // Move toward the player
+                return Vector3.Normalize(new Vector3(direction.x, 0.0f, direction.z));
             }
         }
 
-        // Return the final direction
-        if (finalDirection == Vector3.zero)
-        {
-            return Vector3.zero;
-        }
-        else
-        {
-            return Vector3.Normalize(new Vector3(finalDirection.x, 0.0f, finalDirection.z));
-        }
+        // Don't move
+        return Vector3.zero;
     }
 }
