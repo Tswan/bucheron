@@ -7,7 +7,6 @@ public class GGJ_DeathFadeTimer : MonoBehaviour
     private const float MAX_DEATH_TIMER_FADE = 2.5f;
 
     private float _timer;
-    private bool _fading;
 
     private void Awake()
     {
