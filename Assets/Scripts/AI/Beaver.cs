@@ -40,4 +40,20 @@ public class Beaver : GGJ_EnemyController
         myAnim.SetBool("isWalking", true);
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            attack();
+        }
+    }
+
+    void OnCollisionExit(Collision col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            attack();
+        }
+    }
+
 }
