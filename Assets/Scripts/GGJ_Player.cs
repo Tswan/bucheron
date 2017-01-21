@@ -34,9 +34,11 @@ public class GGJ_Player : MonoBehaviour
 
         // Decrement health
         HitPoints -= damage;
+        Debug.Log(string.Format("Damaging player by {0} points.", damage));
         if (HitPoints >= 0)
         {
             // TODO: Kill player
+            Debug.Log("TODO: Kill player.");
         }
 
         // Shake the camera for an amount of time dependant on the damage
