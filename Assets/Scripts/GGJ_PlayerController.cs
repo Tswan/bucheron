@@ -148,7 +148,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     {
         if (col.gameObject.tag == "Enemy")
         {
-            col.gameObject.GetComponent<Stats>().TakeDamage(col.gameObject, Stats.Attack);
+            col.gameObject.GetComponent<Stats>().TakeDamage(gameObject, Stats.Attack);
         }
     }
 

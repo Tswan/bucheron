@@ -34,7 +34,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     public override void OnKill(GameObject other)
     {
         // Increment the player controller that killed this enemy
-        other.GetComponent<GGJ_PlayerController>().KillCount++;
+        other.gameObject.GetComponent<GGJ_PlayerController>().KillCount++;
 
         // Remove this from the swarm controller
         GameObject.FindObjectOfType<GGJ_SwarmController>().Enemies.Remove(this);
