@@ -21,7 +21,7 @@ namespace Assets.Scripts
         private void OnCollisionEnter(Collision other)
         {
             // Check whether the other object is a player
-            var player = other.gameObject.GetComponent<GGJ_Player>();
+            var player = other.gameObject.GetComponent<GGJ_PlayerController>();
             if (player != null)
             {
                 // Add the currency amount to the player stats object
