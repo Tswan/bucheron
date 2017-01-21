@@ -42,6 +42,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         _runningAudioSource = gameObject.AddComponent<AudioSource>();
         _runningAudioSource.clip = RunningAudio;
         _runningAudioSource.loop = true;
+        _runningAudioSource.volume = 0.25f;
     }
 
     private void Update()

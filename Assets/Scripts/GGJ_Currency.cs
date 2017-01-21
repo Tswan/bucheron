@@ -8,6 +8,7 @@ public class GGJ_Currency : MonoBehaviour
     private const float MAX_IGNORE_PLAYER_LIFE = 0.25f;
 
     public int CurrencyAmount;
+    public AudioClip OnPickup;
 
     private Transform _transform;
     private float _lifeTimer;
@@ -45,8 +46,8 @@ public class GGJ_Currency : MonoBehaviour
                 // Add the currency amount to the player stats object
                 player.Currency += CurrencyAmount;
 
-                // TODO: Play audio
-                Debug.Log("TODO: Play audio for player picking up currency.");
+                // Play audio
+                player.GetComponent<AudioSource>().PlayOneShot(OnPickup, 1.0f);
 
                 // DEBUG: Log that the player is ignoring this object
                 Debug.Log(string.Format("Adding {0} to player ({1}), player now has {2}.", CurrencyAmount, player.tag, player.Currency));
