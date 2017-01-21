@@ -3,7 +3,7 @@ using System.Collections;
 
 using UnityEngine;
 
-public class GGJ_Player : MonoBehaviour, IDamagable
+public class GGJ_PlayerController : MonoBehaviour, IDamagable
 {
 	public Camera MainCamera;
 
