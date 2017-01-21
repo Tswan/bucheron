@@ -11,7 +11,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     public GameObject CurrencyDrop;
     public float MaxViewDistance;
     public AudioClip DeathAudio;
-  
+
     private int _collisionCount;
 
     private void Awake()
@@ -97,7 +97,7 @@ public class GGJ_EnemyController : GGJ_BaseController
             // Check the distance between the enemy and any object between them and the player (including the player)
             var raycastHit = new RaycastHit();
             var racastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
-            
+
             // If we're too close to another object, don't move
             if (_collisionCount <= 0 || !racastResult || raycastHit.collider.GetComponent<GGJ_PlayerController>() != null)
             {
