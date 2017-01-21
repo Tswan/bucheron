@@ -9,7 +9,7 @@ public abstract class GGJ_BaseController : MonoBehaviour
 
     protected virtual void Start()
     {
-        RigidBody = GetComponent<Rigidbody>();
+        RigidBody = gameObject.GetComponent<Rigidbody>();
         Stats = GetComponent<Stats>();
     }
 
