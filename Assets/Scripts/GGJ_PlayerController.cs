@@ -13,6 +13,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     public AudioClip RunningAudio;
     public AudioClip OnSwingAudio;
     public AudioClip OnPuckAudio;
+    public Text money;
+    public Text pucks;
 
     [HideInInspector]
     public int KillCount { get; set; }
@@ -51,6 +53,12 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator.SetBool("isRunning", false);
         _animator.SetBool("isSwinging", false);
         _animator.SetBool("isShooting", false);
+        _animator.SetBool("isWaving", false);
+        _animator.SetBool("isBlocking", false);
+        _animator.SetBool("isHit", false);
+
+        money.text = Currency.ToString();
+        pucks.text = Stats.Ammo.ToString();
 
         base.FixedUpdate();
 
@@ -64,7 +72,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             _animator.SetBool("isJumping", false);
         }
-        
+
         if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false)
         {
             meleeAttack();
@@ -78,7 +86,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
         if (Input.GetAxis("A") > 0)
         {
-
+            block();
         }
         if (Input.GetAxis("X") > 0)
         {
@@ -86,11 +94,11 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
         if (Input.GetAxis("L") > 0)
         {
-
+            OnDamage(gameObject, 1);
         }
         if (Input.GetAxis("R") > 0)
         {
-
+            wave();
         }
         if (Input.GetAxis("Start") > 0)
         {
@@ -104,11 +112,19 @@ public class GGJ_PlayerController : GGJ_BaseController
 
 	public override void OnDamage(GameObject other, int damage)
     {
+
+        startHit();
+        if (_animator.GetBool("isBlocking") == true)
+        { 
+            damage = 0;
+        }
+
 		// DEBUG: Log the damage
 		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
 
         // TODO: Play audio
         Debug.Log("TODO: Play audio for damaging player.");
+
 
         hpSlider.value -= damage;
 
@@ -149,6 +165,16 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator.SetBool("isSwinging", true);
     }
 
+    private void block()
+    {
+        _animator.SetBool("isBlocking", true);
+    }
+
+    private void wave()
+    {
+        _animator.SetBool("isWaving", true);
+    }
+
     private void rangedAttack()
     {
         _animator.SetBool("isShooting", true);
@@ -183,6 +209,17 @@ public class GGJ_PlayerController : GGJ_BaseController
                 newPuck.GetComponent<puck>().shoot(-50);
             }
         }
+    }
+
+    private void startHit()
+    {
+        _animator.SetBool("isHit", true);
+        }
+
+    private void endHit()
+    {
+
+
     }
 
     protected override Vector3 GetMovementDirection()

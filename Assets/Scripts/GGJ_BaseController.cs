@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class GGJ_BaseController : MonoBehaviour
 {
-    protected Stats Stats { get; private set; }
+    public Stats Stats { get; private set; }
 
     public Rigidbody RigidBody { get; private set; }
 
