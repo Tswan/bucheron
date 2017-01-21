@@ -24,16 +24,19 @@ public class Controls : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
+
+		anim.SetBool ("isRunning", false);
+		anim.SetBool ("isSwinging", false);
 		if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f) {
 			//checkMovement ();
 			checkVelocity ();
 		}
 
-		if (Input.GetAxis ("Y") > 0) {
+		if (Input.GetAxis ("Y") > 0 && anim.GetBool("isJumping") == false) {
 			meleeAttack ();
 		}
 		if (Input.GetAxis ("B") > 0) {
-			if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f) {
+			if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f && anim.GetBool("isSwinging") == false) {
 				jump ();
 			}
 		}
@@ -73,7 +76,7 @@ public class Controls : MonoBehaviour
 
 	private void meleeAttack()
 	{
-		anim.Play ("swing");
+		anim.SetBool ("isSwinging", true);
 	}
 
 	private void rangedAttack()
@@ -89,28 +92,38 @@ public class Controls : MonoBehaviour
 
 		if (Input.GetAxis ("Horizontal") > 0.1f) 
 		{
+			transform.rotation = new Quaternion(0, 180, 0, 0);
+			anim.SetBool ("isRunning", true);
 			//rb.velocity = Vector3.right * moveSpeed;
 			x = moveSpeed;
-			transform.rotation = new Quaternion(0, 180, 0, 0);
+			//transform.rotation = new Quaternion(0, 180, 0, 0);
 		} 
 		else if (Input.GetAxis ("Horizontal") < -0.1f) 
 		{
+			transform.rotation = new Quaternion(0, 0, 0, 0);
+			anim.SetBool ("isRunning", true);
 			x = -moveSpeed;
 			//rb.velocity = Vector3.left * moveSpeed;
-			transform.rotation = new Quaternion(0, 0, 0, 0);
+			//transform.rotation = new Quaternion(0, 0, 0, 0);
 		}
 
 		if (Input.GetAxis ("Vertical") < -0.1f) 
 		{
+
+
+			anim.SetBool ("isRunning", true);
 			z = moveSpeed;
 			//rb.velocity = Vector3.forward * moveSpeed;
 		} 
 
 		else if (Input.GetAxis ("Vertical") > 0.1f) 
 		{
+
+			anim.SetBool ("isRunning", true);
 			z = -moveSpeed;
 			//rb.velocity = Vector3.back * moveSpeed;
 		}
+
 
 		rb.velocity = new Vector3 (x, rb.velocity.y, z * 0.75f);
 
@@ -129,14 +142,14 @@ public class Controls : MonoBehaviour
 				//rb.AddForce (Vector3.right * moveSpeed);
 
 				transform.rotation = new Quaternion(0, 180, 0, 0);
-
+				//anim.Play ("run");
 				force += Vector3.right;
 
 			} else if (Input.GetAxis ("Horizontal") < -0.1f) {
 				//print ("LEFT");
 				//x = -moveSpeed * Time.fixedDeltaTime;
 				//rb.AddForce (Vector3.left * moveSpeed);
-
+				//anim.Play ("run");
 				transform.rotation = new Quaternion(0, 0, 0, 0);
 				force += Vector3.left;
 			}
