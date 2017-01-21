@@ -12,6 +12,9 @@ public class Controls : MonoBehaviour
 	Rigidbody rb;
 	SpriteRenderer sr;
 	Animator anim;
+
+	public GameObject puck;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -27,6 +30,7 @@ public class Controls : MonoBehaviour
 
 		anim.SetBool ("isRunning", false);
 		anim.SetBool ("isSwinging", false);
+		anim.SetBool ("isShooting", false);
 		if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f) {
 			//checkMovement ();
 			checkVelocity ();
@@ -81,7 +85,7 @@ public class Controls : MonoBehaviour
 
 	private void rangedAttack()
 	{
-
+		anim.SetBool ("isShooting", true);
 	}
 
 	private void checkVelocity()
@@ -186,6 +190,14 @@ public class Controls : MonoBehaviour
 		if (col.gameObject.tag == "Enemy") 
 		{
 			col.gameObject.GetComponent<Stats> ().TakeDamage (myStats.Attack);
+		}
+	}
+
+	public void shootPuck()
+	{
+		if (myStats.Ammo > 0) 
+		{
+			myStats.Ammo -= 1;
 		}
 	}
 
