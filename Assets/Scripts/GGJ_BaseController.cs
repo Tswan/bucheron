@@ -36,17 +36,14 @@ public abstract class GGJ_BaseController : MonoBehaviour
 
             }
 
-            if(direction.x < 0)
+            if (direction.x < 0)
             {
-                transform.rotation = new Quaternion(0, 0, 0, 0);
-
+                transform.rotation = new Quaternion(transform.rotation.x, 0, transform.rotation.z, transform.rotation.w);
             }
-            else if(direction.x > 0)
+            else if (direction.x > 0)
             {
-                transform.rotation = new Quaternion(0, 180, 0, 0);
-
+                transform.rotation = new Quaternion(transform.rotation.x, 180, transform.rotation.z, transform.rotation.w);
             }
-
         }
     }
 

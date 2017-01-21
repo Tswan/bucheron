@@ -36,7 +36,6 @@ public class Stats : MonoBehaviour
         if (_healthCurrent <= 0)
         {
             _controller.OnKill(other);
-            Destroy(gameObject);
         }
     }
 }

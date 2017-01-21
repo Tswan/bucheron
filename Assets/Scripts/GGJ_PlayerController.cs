@@ -12,6 +12,9 @@ public class GGJ_PlayerController : GGJ_BaseController
     public Text money;
     public Text pucks;
 
+    [HideInInspector]
+    public int KillCount { get; set; }
+
     private DateTime _startTime;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
@@ -171,7 +174,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     {
         if (col.gameObject.tag == "Enemy")
         {
-            col.gameObject.GetComponent<Stats>().TakeDamage(col.gameObject, Stats.Attack);
+            col.gameObject.GetComponent<Stats>().TakeDamage(gameObject, Stats.Attack);
         }
     }
 
