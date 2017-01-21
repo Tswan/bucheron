@@ -9,11 +9,14 @@ public class Controls : MonoBehaviour
 	private Vector3 vel;
 
 	Rigidbody rb;
-
+	SpriteRenderer sr;
+	Animator anim;
 	// Use this for initialization
 	void Start () 
 	{
+		sr = GetComponent<SpriteRenderer> ();
 		rb = GetComponent<Rigidbody> ();
+		anim = GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -69,10 +72,8 @@ public class Controls : MonoBehaviour
 
 	private IEnumerator meleeAttack()
 	{
-		CapsuleCollider col = gameObject.GetComponentInChildren<CapsuleCollider> ();
-		col.enabled = true;
-		yield return new WaitForSeconds (0.4f);
-		col.enabled = false;
+		anim.Play ("swing");
+		yield return null;
 	}
 
 	private void rangedAttack()
@@ -93,7 +94,7 @@ public class Controls : MonoBehaviour
 				vel += Vector3.left * moveSpeed;
 			}
 
-			if (Input.GetAxis ("Vertical") < -0.1f) {
+			if (Input.GetAxis ("Vertical"	) < -0.1f) {
 				vel += Vector3.forward * moveSpeed;
 			} else if (Input.GetAxis ("Vertical") > 0.1f) {
 				vel += Vector3.back * moveSpeed;
@@ -119,13 +120,20 @@ public class Controls : MonoBehaviour
 				//x = moveSpeed * Time.fixedDeltaTime;
 				//print ("RIGHT");
 				//rb.AddForce (Vector3.right * moveSpeed);
-
+				if (!sr.flipX) {
+					sr.flipX = true;
+				}
 				force += Vector3.right;
 
 			} else if (Input.GetAxis ("Horizontal") < -0.1f) {
 				//print ("LEFT");
 				//x = -moveSpeed * Time.fixedDeltaTime;
 				//rb.AddForce (Vector3.left * moveSpeed);
+				if (sr.flipX) {
+					sr.flipX = false;
+				}
+
+
 				force += Vector3.left;
 			}
 
@@ -133,6 +141,8 @@ public class Controls : MonoBehaviour
 				//print ("UP");
 				//z = moveSpeed * Time.fixedDeltaTime;
 				//rb.AddForce (Vector3.forward * moveSpeed);
+
+
 
 				force += Vector3.forward;
 
@@ -149,4 +159,9 @@ public class Controls : MonoBehaviour
 
 	}
 
+	public void chill()
+	{
+		anim.Play ("chill");
+	}
+		
 }
