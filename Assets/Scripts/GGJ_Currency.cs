@@ -3,22 +3,34 @@ using System.Collections;
 
 using UnityEngine;
 
-namespace Assets.Scripts
+public class GGJ_Currency : MonoBehaviour
 {
-    public class GGJ_Currency : MonoBehaviour
+    public int CurrencyAmount;
+
+    private Transform _transform;
+    private float _lifeTimer;
+
+    private void Awake()
     {
-        public int CurrencyAmount;
+        DontDestroyOnLoad(this);
+    }
 
-        private void Awake()
-        {
-            DontDestroyOnLoad(this);
-        }
+    private void Start()
+    {
+        _transform = gameObject.GetComponent<Transform>();
+        _lifeTimer = 0.0f;
+    }
 
-        private void Start()
-        {
-        }
+    private void Update()
+    {
+        _lifeTimer += Time.deltaTime;
+        _transform.Rotate(0.0f, 180.0f * Time.deltaTime, 0.0f);
+    }
 
-        private void OnCollisionEnter(Collision other)
+    private void OnCollisionStay(Collision other)
+    {
+        // Check whether we should be collidable yet
+        if (_lifeTimer > 0.25f)
         {
             // Check whether the other object is a player
             var player = other.gameObject.GetComponent<GGJ_PlayerController>();

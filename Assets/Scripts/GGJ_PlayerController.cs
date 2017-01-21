@@ -83,7 +83,7 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
         }
     }
 
-	public void OnDamage(int damage)
+	public void OnDamage(GameObject other, int damage)
     {
 		// DEBUG: Log the damage
 		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
@@ -98,7 +98,7 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
         MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
-	public void OnKill()
+	public void OnKill(GameObject other)
 	{
 		// DEBUG: Log killing player
 		Debug.Log("Player has been killed.");
@@ -145,7 +145,7 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
     {
         if (col.gameObject.tag == "Enemy")
         {
-            col.gameObject.GetComponent<Stats>().TakeDamage(Stats.Attack);
+            col.gameObject.GetComponent<Stats>().TakeDamage(col.gameObject, Stats.Attack);
         }
     }
 
