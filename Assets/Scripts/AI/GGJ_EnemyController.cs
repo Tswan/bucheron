@@ -10,9 +10,9 @@ public class GGJ_EnemyController : GGJ_BaseController
 
     public GameObject CurrencyDrop;
     public float MaxViewDistance;
+    public AudioClip DeathAudio;
   
     private int _collisionCount;
-    private float _lifeTimer;
 
     private void Awake()
     {
@@ -27,8 +27,9 @@ public class GGJ_EnemyController : GGJ_BaseController
 
     public override void OnDamage(GameObject other, int damage)
     {
-        // TODO: Play sound effect enemy being damaged
-        Debug.Log("TODO: Play sound effect enemy being damaged.");
+        // Call the sound effect of the enemy being hit
+        var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
+        playerController.GetComponent<AudioSource>().PlayOneShot(playerController.OnHitAudio, 0.5f);
     }
 
     public override void OnKill(GameObject other)
@@ -50,6 +51,9 @@ public class GGJ_EnemyController : GGJ_BaseController
         var currencyObject = Instantiate(CurrencyDrop, gameObject.transform.position, Quaternion.identity) as GameObject;
         var direction = currencyObject.transform.position - other.transform.position;
         currencyObject.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, other.transform.position, 10.0f);
+
+        // Play death audio
+        gameObject.GetComponent<AudioSource>().PlayOneShot(DeathAudio, 0.5f);
 
         // Spawn a death fade timer
         gameObject.AddComponent<GGJ_DeathFadeTimer>();

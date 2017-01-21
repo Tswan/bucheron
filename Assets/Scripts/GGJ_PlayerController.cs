@@ -9,6 +9,10 @@ public class GGJ_PlayerController : GGJ_BaseController
     public int Currency;
     public GameObject Puck;
     public Slider hpSlider;
+    public AudioClip OnHitAudio;
+    public AudioClip RunningAudio;
+    public AudioClip OnSwingAudio;
+    public AudioClip OnPuckAudio;
     public Text money;
     public Text pucks;
 
@@ -18,6 +22,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     private DateTime _startTime;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private AudioSource _runningAudioSource;
 
     private void Awake()
     {
@@ -27,12 +32,17 @@ public class GGJ_PlayerController : GGJ_BaseController
     protected override void Start()
     {
         base.Start();
+
         hpSlider.maxValue = GetComponent<Stats>().HealthMax;
         hpSlider.value = GetComponent<Stats>().HealthMax;
         _startTime = DateTime.UtcNow;
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        
+
+        _runningAudioSource = gameObject.AddComponent<AudioSource>();
+        _runningAudioSource.clip = RunningAudio;
+        _runningAudioSource.loop = true;
+        _runningAudioSource.volume = 0.25f;
     }
 
     private void Update()
@@ -51,6 +61,12 @@ public class GGJ_PlayerController : GGJ_BaseController
         pucks.text = Stats.Ammo.ToString();
 
         base.FixedUpdate();
+
+        // Check whether we're still running
+        if (!_animator.GetBool("isRunning"))
+        {
+            StopRunningAudio();
+        }
 
         if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
         {
@@ -109,11 +125,11 @@ public class GGJ_PlayerController : GGJ_BaseController
         // TODO: Play audio
         Debug.Log("TODO: Play audio for damaging player.");
 
-        Stats._healthCurrent -= damage;
+
         hpSlider.value -= damage;
 
         // Shake the camera for an amount of time dependant on the damage
-        //MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
+        MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
 	public override void OnKill(GameObject other)
@@ -183,6 +199,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             Stats.Ammo--;
             var newPuck = Instantiate(Puck, transform.FindChild("puckEmitter").gameObject.transform.position, Quaternion.identity) as GameObject;
+            GetComponent<AudioSource>().PlayOneShot(OnPuckAudio, 2.0f);
             if (transform.rotation.y > 0)
             {
                 newPuck.GetComponent<puck>().shoot(50);
@@ -197,7 +214,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     private void startHit()
     {
         _animator.SetBool("isHit", true);
-    }
+        }
 
     private void endHit()
     {
@@ -250,5 +267,20 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             return Vector3.zero;
         }
+    }
+
+    private void PlayMeleeAudio()
+    {
+        GetComponent<AudioSource>().PlayOneShot(OnSwingAudio, 2.0f);
+    }
+
+    private void StartRunningAudio()
+    {
+        _runningAudioSource.Play();
+    }
+
+    private void StopRunningAudio()
+    {
+        _runningAudioSource.Stop();
     }
 }
