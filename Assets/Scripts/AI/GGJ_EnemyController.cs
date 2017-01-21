@@ -24,8 +24,15 @@ public class GGJ_EnemyController : MonoBehaviour, IDamagable
         // Check whether the enemy can see the player by attempting to raycast to the player
         foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
         {
+            // Find direction between enemy and player
+            var direction = Vector3.Normalize(gameObject.transform.position - ggjPlayerController.gameObject.transform.position);
+
+            // Cast a ray and check the result
             var raycastHit = new RaycastHit();
-            //Physics.Raycast();
+            if (Physics.Raycast(gameObject.transform.position, direction, out raycastHit))
+            {
+
+            }
         }
     }
 
