@@ -23,7 +23,6 @@ public class Stats : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        HealthCurrent -= amount;
         _damagable.OnDamage(amount);
 
         if (HealthCurrent <= 0)

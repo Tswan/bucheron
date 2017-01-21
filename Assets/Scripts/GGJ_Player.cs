@@ -10,6 +10,8 @@ public class GGJ_Player : MonoBehaviour, IDamagable
     public int Currency;
     private DateTime _startTime;
 
+	private Stats myStats;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -18,6 +20,7 @@ public class GGJ_Player : MonoBehaviour, IDamagable
     private void Start()
     {
         _startTime = DateTime.UtcNow;
+		myStats = GetComponent<Stats> ();
     }
 
     private void Update()

@@ -7,6 +7,7 @@ public class Controls : MonoBehaviour
 	public float jumpSpeed;
 
 	private Vector3 vel;
+	private Stats myStats;
 
 	Rigidbody rb;
 	SpriteRenderer sr;
@@ -17,19 +18,19 @@ public class Controls : MonoBehaviour
 		sr = GetComponent<SpriteRenderer> ();
 		rb = GetComponent<Rigidbody> ();
 		anim = GetComponent<Animator> ();
+		myStats = GetComponent<Stats> ();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
 		if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f) {
-			checkMovement ();
+			//checkMovement ();
+			checkVelocity ();
 		}
 
-		//checkVelocity ();
-
 		if (Input.GetAxis ("Y") > 0) {
-			StartCoroutine ("meleeAttack");
+			meleeAttack ();
 		}
 		if (Input.GetAxis ("B") > 0) {
 			if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f) {
@@ -37,7 +38,7 @@ public class Controls : MonoBehaviour
 			}
 		}
 		if (Input.GetAxis ("A") > 0) {
-			print ("A");
+
 		}
 		if (Input.GetAxis ("X") > 0) {
 			rangedAttack ();
@@ -70,10 +71,9 @@ public class Controls : MonoBehaviour
 		//rb.velocity = new Vector3 (rb.velocity.x, jumpSpeed, rb.velocity.z);
 	}
 
-	private IEnumerator meleeAttack()
+	private void meleeAttack()
 	{
 		anim.Play ("swing");
-		yield return null;
 	}
 
 	private void rangedAttack()
@@ -84,29 +84,36 @@ public class Controls : MonoBehaviour
 	private void checkVelocity()
 	{
 
-		if (gameObject.GetComponent<Rigidbody> ().velocity.y <= 0.01f && gameObject.GetComponent<Rigidbody> ().velocity.y >= -0.01f) {
+		float x = 0;
+		float z = 0;
 
-			vel = new Vector3 (0, rb.velocity.y, 0);
-
-			if (Input.GetAxis ("Horizontal") > 0.1f) {
-				vel += Vector3.right * moveSpeed;	
-			} else if (Input.GetAxis ("Horizontal") < -0.1f) {
-				vel += Vector3.left * moveSpeed;
-			}
-
-			if (Input.GetAxis ("Vertical"	) < -0.1f) {
-				vel += Vector3.forward * moveSpeed;
-			} else if (Input.GetAxis ("Vertical") > 0.1f) {
-				vel += Vector3.back * moveSpeed;
-			}
-
-			rb.velocity = vel;
-
-		} 
-		else
+		if (Input.GetAxis ("Horizontal") > 0.1f) 
 		{
-			rb.velocity = vel;
+			//rb.velocity = Vector3.right * moveSpeed;
+			x = moveSpeed;
+			transform.rotation = new Quaternion(0, 180, 0, 0);
+		} 
+		else if (Input.GetAxis ("Horizontal") < -0.1f) 
+		{
+			x = -moveSpeed;
+			//rb.velocity = Vector3.left * moveSpeed;
+			transform.rotation = new Quaternion(0, 0, 0, 0);
 		}
+
+		if (Input.GetAxis ("Vertical") < -0.1f) 
+		{
+			z = moveSpeed;
+			//rb.velocity = Vector3.forward * moveSpeed;
+		} 
+
+		else if (Input.GetAxis ("Vertical") > 0.1f) 
+		{
+			z = -moveSpeed;
+			//rb.velocity = Vector3.back * moveSpeed;
+		}
+
+		rb.velocity = new Vector3 (x, rb.velocity.y, z * 0.75f);
+
 	}
 
 	private void checkMovement()
@@ -120,20 +127,17 @@ public class Controls : MonoBehaviour
 				//x = moveSpeed * Time.fixedDeltaTime;
 				//print ("RIGHT");
 				//rb.AddForce (Vector3.right * moveSpeed);
-				if (!sr.flipX) {
-					sr.flipX = true;
-				}
+
+				transform.rotation = new Quaternion(0, 180, 0, 0);
+
 				force += Vector3.right;
 
 			} else if (Input.GetAxis ("Horizontal") < -0.1f) {
 				//print ("LEFT");
 				//x = -moveSpeed * Time.fixedDeltaTime;
 				//rb.AddForce (Vector3.left * moveSpeed);
-				if (sr.flipX) {
-					sr.flipX = false;
-				}
 
-
+				transform.rotation = new Quaternion(0, 0, 0, 0);
 				force += Vector3.left;
 			}
 
@@ -163,5 +167,13 @@ public class Controls : MonoBehaviour
 	{
 		anim.Play ("chill");
 	}
-		
+
+	void OnTriggerEnter(Collider col)
+	{
+		if (col.gameObject.tag == "Enemy") 
+		{
+			col.gameObject.GetComponent<Stats> ().TakeDamage (myStats.Attack);
+		}
+	}
+
 }
