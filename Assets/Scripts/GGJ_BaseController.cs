@@ -3,14 +3,15 @@ using System.Collections;
 
 public abstract class GGJ_BaseController : MonoBehaviour
 {
-    [HideInInspector]
-    public Stats Stats { get; private set; }
+    protected Stats Stats { get; private set; }
 
-    [HideInInspector]
     public Rigidbody RigidBody { get; private set; }
+
+    public Animator myAnim;
 
     protected virtual void Start()
     {
+        myAnim = gameObject.GetComponent<Animator>();
         RigidBody = gameObject.GetComponent<Rigidbody>();
         Stats = GetComponent<Stats>();
     }
@@ -32,7 +33,20 @@ public abstract class GGJ_BaseController : MonoBehaviour
             {
                 // Apply movement using proper physics
                 RigidBody.AddForce(GetMovementDirection() * GetMovementSpeed());
+
             }
+
+            if(direction.x < 0)
+            {
+                transform.rotation = new Quaternion(0, 0, 0, 0);
+
+            }
+            else if(direction.x > 0)
+            {
+                transform.rotation = new Quaternion(0, 180, 0, 0);
+
+            }
+
         }
     }
 

@@ -177,7 +177,6 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
                 //x = moveSpeed * Time.fixedDeltaTime;
                 //print ("RIGHT");
                 //rb.AddForce (Vector3.right * moveSpeed);
-                transform.rotation = new Quaternion(0, 180, 0, 0);
                 _animator.SetBool("isRunning", true);
                 diection += Vector3.right;
             }
@@ -187,7 +186,6 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
                 //x = -moveSpeed * Time.fixedDeltaTime;
                 //rb.AddForce (Vector3.left * moveSpeed);
                 _animator.SetBool("isRunning", true);
-                transform.rotation = new Quaternion(0, 0, 0, 0);
                 diection += Vector3.left;
             }
 

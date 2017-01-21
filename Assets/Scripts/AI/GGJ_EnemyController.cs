@@ -10,7 +10,7 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
 
     public GameObject CurrencyDrop;
     public float MaxViewDistance;
-
+  
     private int _collisionCount;
 
     private void Awake()
