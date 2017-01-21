@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GGJ_EnemyController : GGJ_BaseController, IDamagable
 {
+    public GameObject CurrencyDrop;
     public float MaxViewDistance;
     
     private void Awake()
@@ -19,7 +20,16 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
 
     public void OnKill()
     {
-        // TODO:
+        // Drop currency
+        Instantiate(CurrencyDrop);
+
+        // TODO: Player sound effect for currency drop
+        Debug.Log("TODO: Play sound effect for currency drop.");
+
+        // Remove this from the swarm controller
+        GameObject.FindObjectOfType<GGJ_SwarmController>().Enemies.Remove(this);
+
+        // Destory object
         Destroy(gameObject);
     }
 
