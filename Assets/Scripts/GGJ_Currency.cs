@@ -47,7 +47,7 @@ public class GGJ_Currency : MonoBehaviour
                 player.Currency += CurrencyAmount;
 
                 // Play audio
-                player.GetComponent<AudioSource>().PlayOneShot(OnPickup, 1.0f);
+                player.GenericAudioSource.PlayOneShot(OnPickup, 1.0f);
 
                 // DEBUG: Log that the player is ignoring this object
                 Debug.Log(string.Format("Adding {0} to player ({1}), player now has {2}.", CurrencyAmount, player.tag, player.Currency));

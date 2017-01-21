@@ -29,7 +29,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     {
         // Call the sound effect of the enemy being hit
         var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
-        playerController.GetComponent<AudioSource>().PlayOneShot(playerController.OnHitAudio, 0.5f);
+        playerController.OnHitAudioSource.Play();
     }
 
     public override void OnKill(GameObject other)
