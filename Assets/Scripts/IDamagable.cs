@@ -3,6 +3,6 @@ using System.Collections;
 
 public interface IDamagable 
 {
-	void OnDamage (int damage);
-	void OnKill();
+	void OnDamage (GameObject other, int damage);
+	void OnKill(GameObject other);
 }

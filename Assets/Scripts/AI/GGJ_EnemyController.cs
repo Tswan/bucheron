@@ -13,15 +13,17 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
         DontDestroyOnLoad(this);
     }
     
-    public void OnDamage(int damage)
+    public void OnDamage(GameObject other, int damage)
     {
         // TODO:
     }
 
-    public void OnKill()
+    public void OnKill(GameObject other)
     {
         // Drop currency
-        Instantiate(CurrencyDrop);
+        var currencyObject = Instantiate(CurrencyDrop, gameObject.transform.position, Quaternion.identity) as GameObject;
+        var direction = currencyObject.transform.position - other.transform.position;
+        currencyObject.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, other.transform.position, 10.0f);
 
         // TODO: Player sound effect for currency drop
         Debug.Log("TODO: Play sound effect for currency drop.");

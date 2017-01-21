@@ -8,7 +8,7 @@ public class attack : MonoBehaviour
 		switch (col.gameObject.tag) 
 		{
 			case "Enemy":
-				col.GetComponent<Stats> ().TakeDamage (gameObject.GetComponentInParent<Stats>().Attack);
+				col.GetComponent<Stats> ().TakeDamage (col.gameObject, gameObject.GetComponentInParent<Stats>().Attack);
 				gameObject.GetComponent<CapsuleCollider> ().enabled = false;
 				break;
 		}
