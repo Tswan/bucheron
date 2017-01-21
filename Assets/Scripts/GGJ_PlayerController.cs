@@ -25,6 +25,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     public AudioSource OnSwingAudioSource { get; private set; }
     [HideInInspector]
     public AudioSource OnPuckAudioSource { get; private set; }
+    [HideInInspector]
+    public AudioSource GenericAudioSource { get; private set; }
 
     private DateTime _startTime;
     private Animator _animator;
@@ -60,6 +62,10 @@ public class GGJ_PlayerController : GGJ_BaseController
         OnPuckAudioSource.clip = OnPuckAudio;
         OnPuckAudioSource.loop = false;
         OnPuckAudioSource.volume = 2.0f;
+
+        GenericAudioSource = gameObject.AddComponent<AudioSource>();
+        GenericAudioSource.loop = false;
+        GenericAudioSource.volume = 1.0f;
 
         _runningAudioSource = gameObject.AddComponent<AudioSource>();
         _runningAudioSource.clip = RunningAudio;
