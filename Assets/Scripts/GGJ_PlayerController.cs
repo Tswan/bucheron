@@ -9,6 +9,10 @@ public class GGJ_PlayerController : GGJ_BaseController
     public int Currency;
     public GameObject Puck;
     public Slider hpSlider;
+    public AudioClip OnHitAudio;
+    public AudioClip RunningAudio;
+    public AudioClip OnSwingAudio;
+    public AudioClip OnPuckAudio;
 
     [HideInInspector]
     public int KillCount { get; set; }
@@ -16,6 +20,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     private DateTime _startTime;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private AudioSource _runningAudioSource;
 
     private void Awake()
     {
@@ -25,11 +30,16 @@ public class GGJ_PlayerController : GGJ_BaseController
     protected override void Start()
     {
         base.Start();
+
         hpSlider.maxValue = GetComponent<Stats>().HealthMax;
         hpSlider.value = GetComponent<Stats>().HealthMax;
         _startTime = DateTime.UtcNow;
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        _runningAudioSource = gameObject.AddComponent<AudioSource>();
+        _runningAudioSource.clip = RunningAudio;
+        _runningAudioSource.loop = true;
     }
 
     private void Update()
@@ -44,11 +54,17 @@ public class GGJ_PlayerController : GGJ_BaseController
 
         base.FixedUpdate();
 
+        // Check whether we're still running
+        if (!_animator.GetBool("isRunning"))
+        {
+            StopRunningAudio();
+        }
+
         if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
         {
             _animator.SetBool("isJumping", false);
         }
-
+        
         if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false)
         {
             meleeAttack();
@@ -93,7 +109,6 @@ public class GGJ_PlayerController : GGJ_BaseController
 
         // TODO: Play audio
         Debug.Log("TODO: Play audio for damaging player.");
-
 
         hpSlider.value -= damage;
 
@@ -158,6 +173,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             Stats.Ammo--;
             var newPuck = Instantiate(Puck, transform.FindChild("puckEmitter").gameObject.transform.position, Quaternion.identity) as GameObject;
+            GetComponent<AudioSource>().PlayOneShot(OnPuckAudio, 2.0f);
             if (transform.rotation.y > 0)
             {
                 newPuck.GetComponent<puck>().shoot(50);
@@ -215,5 +231,20 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             return Vector3.zero;
         }
+    }
+
+    private void PlayMeleeAudio()
+    {
+        GetComponent<AudioSource>().PlayOneShot(OnSwingAudio, 2.0f);
+    }
+
+    private void StartRunningAudio()
+    {
+        _runningAudioSource.Play();
+    }
+
+    private void StopRunningAudio()
+    {
+        _runningAudioSource.Stop();
     }
 }
