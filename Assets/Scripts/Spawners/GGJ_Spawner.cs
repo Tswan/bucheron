@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Spawner : MonoBehaviour
 {
+    public GameObject EnemyPrefab;
+
     private GGJ_Player _collidedPlayer;
     private float _timeElapsedSinceLastSpawn;
     private int _spawnedCount;
@@ -29,7 +31,9 @@ public class Spawner : MonoBehaviour
             // Check whether we should spawn an enemy
             if (Mathf.Sin(_timeElapsedSinceLastSpawn) > 0.0f)
             {
-                // TODO: Spawn enemy
+                // Spawn enemy
+                Instantiate(EnemyPrefab, gameObject.transform.localPosition, Quaternion.identity);
+                Debug.Log(string.Format("Spawned enemy {0} of {1}.", _spawnedCount + 1, MaxSpawnCount));
 
                 // Increment the spawned count
                 _spawnedCount++;
@@ -41,6 +45,7 @@ public class Spawner : MonoBehaviour
                 if (_spawnedCount >= MaxSpawnCount)
                 {
                     // Destory this as we're done with it
+                    Debug.Log(string.Format("Max spawn count reached ({0}/{1}), destorying spawner.", _spawnedCount, MaxSpawnCount));
                     Destroy(this);
                 }
             }

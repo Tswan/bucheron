@@ -22,7 +22,6 @@ public class GGJ_Player : MonoBehaviour, IDamagable
 
     private void Update()
 	{
-		//MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = 1.0f;
     }
 
 	public void OnDamage(int damage)
