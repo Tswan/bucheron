@@ -46,7 +46,6 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator.SetBool("isShooting", false);
         _animator.SetBool("isWaving", false);
         _animator.SetBool("isBlocking", false);
-        _animator.SetBool("isHit", false);
 
         money.text = Currency.ToString();
         pucks.text = Stats.Ammo.ToString();
@@ -202,8 +201,7 @@ public class GGJ_PlayerController : GGJ_BaseController
 
     private void endHit()
     {
-
-
+        _animator.SetBool("isHit", false);
     }
 
     protected override Vector3 GetMovementDirection()
