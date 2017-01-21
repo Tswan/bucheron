@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GGJ_Enemy : MonoBehaviour, IDamagable
@@ -33,11 +33,6 @@ public class GGJ_Enemy : MonoBehaviour, IDamagable
 	{
 		// TODO:
 		Destroy(gameObject);
-	}
-
-	private void onSee()
-	{
-
 	}
 		
 }
