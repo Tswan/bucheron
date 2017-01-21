@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GGJ_Currency : MonoBehaviour
 {
+    private const float MAX_IGNORE_PLAYER_LIFE = 0.25f;
+
     public int CurrencyAmount;
 
     private Transform _transform;
@@ -30,7 +32,7 @@ public class GGJ_Currency : MonoBehaviour
     private void OnCollisionStay(Collision other)
     {
         // Check whether we should be collidable yet
-        if (_lifeTimer > 0.25f)
+        if (_lifeTimer > MAX_IGNORE_PLAYER_LIFE)
         {
             // Check whether the other object is a player
             var player = other.gameObject.GetComponent<GGJ_PlayerController>();
