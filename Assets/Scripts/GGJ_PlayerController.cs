@@ -9,6 +9,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     public int Currency;
     public GameObject Puck;
     public Slider hpSlider;
+    public Text money;
+    public Text pucks;
 
     private DateTime _startTime;
     private Animator _animator;
@@ -27,6 +29,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         _startTime = DateTime.UtcNow;
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        
     }
 
     private void Update()
@@ -38,6 +41,12 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator.SetBool("isRunning", false);
         _animator.SetBool("isSwinging", false);
         _animator.SetBool("isShooting", false);
+        _animator.SetBool("isWaving", false);
+        _animator.SetBool("isBlocking", false);
+        _animator.SetBool("isHit", false);
+
+        money.text = Currency.ToString();
+        pucks.text = Stats.Ammo.ToString();
 
         base.FixedUpdate();
 
@@ -59,7 +68,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
         if (Input.GetAxis("A") > 0)
         {
-
+            block();
         }
         if (Input.GetAxis("X") > 0)
         {
@@ -67,11 +76,11 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
         if (Input.GetAxis("L") > 0)
         {
-
+            OnDamage(gameObject, 1);
         }
         if (Input.GetAxis("R") > 0)
         {
-
+            wave();
         }
         if (Input.GetAxis("Start") > 0)
         {
@@ -85,17 +94,24 @@ public class GGJ_PlayerController : GGJ_BaseController
 
 	public override void OnDamage(GameObject other, int damage)
     {
+
+        startHit();
+        if (_animator.GetBool("isBlocking") == true)
+        { 
+            damage = 0;
+        }
+
 		// DEBUG: Log the damage
 		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
 
         // TODO: Play audio
         Debug.Log("TODO: Play audio for damaging player.");
 
-
+        Stats._healthCurrent -= damage;
         hpSlider.value -= damage;
 
         // Shake the camera for an amount of time dependant on the damage
-        MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
+        //MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
 	public override void OnKill(GameObject other)
@@ -131,6 +147,16 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator.SetBool("isSwinging", true);
     }
 
+    private void block()
+    {
+        _animator.SetBool("isBlocking", true);
+    }
+
+    private void wave()
+    {
+        _animator.SetBool("isWaving", true);
+    }
+
     private void rangedAttack()
     {
         _animator.SetBool("isShooting", true);
@@ -164,6 +190,17 @@ public class GGJ_PlayerController : GGJ_BaseController
                 newPuck.GetComponent<puck>().shoot(-50);
             }
         }
+    }
+
+    private void startHit()
+    {
+        _animator.SetBool("isHit", true);
+    }
+
+    private void endHit()
+    {
+
+
     }
 
     protected override Vector3 GetMovementDirection()
