@@ -27,6 +27,9 @@ namespace Assets.Scripts
                 // Add the currency amount to the player stats object
                 player.Currency += CurrencyAmount;
 
+                // TODO: Play audio
+                Debug.Log("TODO: Play audio for player picking up currency.");
+
                 // DEBUG: Log that the player is ignoring this object
                 Debug.Log(string.Format("Adding {0} to player ({1}), player now has {2}.", CurrencyAmount, player.tag, player.Currency));
 

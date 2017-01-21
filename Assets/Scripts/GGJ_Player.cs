@@ -31,6 +31,7 @@ public class GGJ_Player : MonoBehaviour, IDamagable
 		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
 
         // TODO: Play audio
+        Debug.Log("TODO: Play audio for damaging player.");
 
         // Shake the camera for an amount of time dependant on the damage
         MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
@@ -41,6 +42,9 @@ public class GGJ_Player : MonoBehaviour, IDamagable
 		// DEBUG: Log killing player
 		Debug.Log("Player has been killed.");
 
-		// TODO: Handle player death
-	}
+        // TODO: Play audio
+        Debug.Log("TODO: Player audio for player dying.");
+
+        // TODO: Handle player death
+    }
 }
