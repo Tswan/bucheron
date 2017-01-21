@@ -30,7 +30,7 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
         foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
         {
             // Find direction between enemy and player
-            var enemyPosition = GetComponent<Rigidbody>().transform.position;
+            var enemyPosition = RigidBody.transform.position;
             var playerPosition = ggjPlayerController.GetComponent<Rigidbody>().transform.position;
             var direction = playerPosition - enemyPosition;
 

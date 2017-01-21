@@ -48,8 +48,7 @@ public class GGJ_Spawner : MonoBehaviour
                 Debug.Log(string.Format("Spawned enemy {0} of {1}.", _spawnedCount + 1, MaxSpawnCount));
 
                 // Add a new controller
-                var enemyController = enemyGameObject.AddComponent<GGJ_EnemyController>();
-                enemyController.MaxViewDistance = float.MaxValue;
+                var enemyController = enemyGameObject.GetComponent<GGJ_EnemyController>();
                 _swarmController.Enemies.Add(enemyController);
 
                 // Increment the spawned count
