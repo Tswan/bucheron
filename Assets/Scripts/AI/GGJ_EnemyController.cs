@@ -25,7 +25,7 @@ public class GGJ_EnemyController : MonoBehaviour, IDamagable
         foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
         {
             var raycastHit = new RaycastHit();
-            Physics.Raycast();
+            //Physics.Raycast();
         }
     }
 

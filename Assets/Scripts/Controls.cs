@@ -196,6 +196,15 @@ public class Controls : MonoBehaviour
         if (myStats.Ammo > 0)
         {
             myStats.Ammo -= 1;
+            GameObject newPuck = Instantiate(puck, transform.FindChild("puckEmitter").gameObject.transform.position, Quaternion.identity) as GameObject;
+            if (transform.rotation.y > 0)
+            {
+                newPuck.GetComponent<puck>().shoot(50);
+            }
+            else
+            {
+                newPuck.GetComponent<puck>().shoot(-50);
+            }
         }
     }
 
