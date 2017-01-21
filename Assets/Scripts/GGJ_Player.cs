@@ -7,7 +7,7 @@ public class GGJ_Player : MonoBehaviour, IDamagable
 {
 	public Camera MainCamera;
 
-    private int _currency;
+    public int Currency;
     private DateTime _startTime;
 
     private void Awake()
@@ -28,7 +28,7 @@ public class GGJ_Player : MonoBehaviour, IDamagable
 	public void OnDamage(int damage)
     {
 		// DEBUG: Log the damage
-		//Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
+		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
 
         // TODO: Play audio
 
