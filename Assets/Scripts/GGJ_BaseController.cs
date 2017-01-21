@@ -5,26 +5,32 @@ public abstract class GGJ_BaseController : MonoBehaviour
 {
     protected Stats Stats { get; private set; }
 
-    private Rigidbody _rigidBody;
+    protected Rigidbody RigidBody { get; private set; }
 
-    private void Start()
+    protected virtual void Start()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        RigidBody = GetComponent<Rigidbody>();
         Stats = GetComponent<Stats>();
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-        if (true)
+        // Check there is movement to be applied
+        var direction = GetMovementDirection();
+        if (direction != Vector3.zero)
         {
-            // Apply movement by modifying the velocity
-            var direction = GetMovementDirection();
-            _rigidBody.velocity = new Vector3(direction.x, _rigidBody.velocity.y, direction.z * 0.75f);
-        }
-        else
-        {
-            // Apply movement using proper physics
-            _rigidBody.AddForce(GetMovementDirection() * GetMovementSpeed());
+            if (true)
+            {
+                // Apply movement by modifying the velocity
+                var movementSpeed = GetMovementSpeed();
+                RigidBody.velocity = new Vector3(direction.x * movementSpeed,
+                    RigidBody.velocity.y, direction.z * 0.75f * movementSpeed);
+            }
+            else
+            {
+                // Apply movement using proper physics
+                RigidBody.AddForce(GetMovementDirection() * GetMovementSpeed());
+            }
         }
     }
 
