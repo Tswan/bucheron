@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class GGJ_EnemyController : MonoBehaviour, IDamagable
+public class GGJ_EnemyController : GGJ_BaseController, IDamagable
 {
     [HideInInspector]
     public float MaxViewDistance { get; set; }
@@ -20,7 +20,18 @@ public class GGJ_EnemyController : MonoBehaviour, IDamagable
         _stats = GetComponent<Stats>();
     }
 
-    private void Update()
+    public void OnDamage(int damage)
+    {
+        // TODO:
+    }
+
+    public void OnKill()
+    {
+        // TODO:
+        Destroy(gameObject);
+    }
+
+    protected override Vector3 GetMovementDirection()
     {
         // Check whether the enemy can see the player by attempting to raycast to the player
         foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
@@ -37,21 +48,12 @@ public class GGJ_EnemyController : MonoBehaviour, IDamagable
                 {
                     // TODO: Move toward the player
                     Debug.Log("TODO: Move enemy toward the player.");
-                    break;
+                    return direction;
                 }
             }
         }
-    }
 
-    public void OnDamage(int damage)
-    {
-        // TODO:
+        // If all else fails return forwards
+        return Vector3.forward;
     }
-
-    public void OnKill()
-    {
-        // TODO:
-        Destroy(gameObject);
-    }
-
 }
