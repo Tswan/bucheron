@@ -29,15 +29,3 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-/Assets/Models/Materials/SnowWhite_Mat.mat.meta
-/Assets/Models/Materials/SnowWhite_Mat.mat
-/Assets/Models/Materials/CharcoalBlack_Mat.mat.meta
-/Assets/Models/Materials/CharcoalBlack_Mat.mat
-/Assets/Models/Materials/CarrotOrange_Mat.mat.meta
-/Assets/Models/Materials/CarrotOrange_Mat.mat
-/Assets/Models/Small_Snowman.fbx.meta
-/Assets/Models/Log.fbx.meta
-/Assets/Models/Large_Snowman.fbx.meta
-/Assets/Scripts/GGJ_Currency.cs.meta
-/Assets/Scripts/Cameras.meta
-/Assets/Scripts/Cameras/GGJ_CameraShake.cs.meta
