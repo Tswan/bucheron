@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class GGJ_EnemyController : MonoBehaviour, IDamagable
 {
-    public int Movement;
+    [HideInInspector]
+    public float MaxViewDistance { get; set; }
 
     private Stats _stats;
 
@@ -29,9 +30,15 @@ public class GGJ_EnemyController : MonoBehaviour, IDamagable
 
             // Cast a ray and check the result
             var raycastHit = new RaycastHit();
-            if (Physics.Raycast(gameObject.transform.position, direction, out raycastHit))
+            if (Physics.Raycast(gameObject.transform.position, direction, out raycastHit, MaxViewDistance))
             {
-
+                var playerHit = raycastHit.rigidbody.gameObject.GetComponent<GGJ_PlayerController>();
+                if (playerHit != null)
+                {
+                    // TODO: Move toward the player
+                    Debug.Log("TODO: Move enemy toward the player.");
+                    break;
+                }
             }
         }
     }
