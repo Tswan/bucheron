@@ -12,4 +12,10 @@ public class puck : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void shoot(float speed)
+    {
+        GetComponent<Rigidbody>().velocity = Vector3.right * speed;
+    }
+
 }

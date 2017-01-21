@@ -45,13 +45,13 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
             {
                 var playerHit = raycastHit.rigidbody.gameObject.GetComponent<GGJ_PlayerController>();
                 if (playerHit != null)
-                {
+            {
                     // TODO: Move toward the player
                     Debug.Log("TODO: Move enemy toward the player.");
                     return direction;
-                }
-            }
         }
+    }
+    }
 
         // If all else fails return forwards
         return Vector3.forward;
