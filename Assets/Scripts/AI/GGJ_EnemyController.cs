@@ -29,7 +29,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     {
         // Call the sound effect of the enemy being hit
         var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
-        playerController.OnHitAudioSource.Play();
+        playerController.GetComponent<AudioSource>().PlayOneShot(playerController.OnHitAudio, 0.5f);
     }
 
     public override void OnKill(GameObject other)
@@ -58,9 +58,9 @@ public class GGJ_EnemyController : GGJ_BaseController
         // Spawn a death fade timer
         gameObject.AddComponent<GGJ_DeathFadeTimer>();
 
-        Destroy(gameObject); ;
+        Destroy(this); ;
 
-        // Destory this controller, we are done now
+        // Destory this controller, we are done now.
         
     }
 
