@@ -3,29 +3,37 @@ using System.Collections;
 
 public class Stats : MonoBehaviour
 {
+    public float MoveSpeed;
+    public float JumpSpeed;
+
     public int HealthMax;
-    public int HealthCurrent;
     public int Attack;
     public int Defense;
 
     public int Ammo;
 
+    public int _healthCurrent;
     private bool _invincible;
     private IDamagable _damagable;
 
     // Use this for initialization
     void Start()
     {
-        HealthCurrent = HealthMax;
+        _healthCurrent = HealthMax;
         _invincible = false;
         _damagable = gameObject.GetComponent<IDamagable>();
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int damage)
     {
-        _damagable.OnDamage(amount);
+        // Decrement health
+        _healthCurrent -= damage;
 
-        if (HealthCurrent <= 0)
+        // Call the on dmage event for the controller
+        _damagable.OnDamage(damage);
+
+        // Check whether we should kill the parent object
+        if (_healthCurrent <= 0)
         {
             _damagable.OnKill();
             Destroy(gameObject);

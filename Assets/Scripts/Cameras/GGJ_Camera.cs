@@ -33,7 +33,7 @@ public class GGJ_Camera : MonoBehaviour
     {
         // Find average position of players
         // For ease of development we'll do this every update so we don't have to manage re-finding players when they're destroyed and respawned
-        var players = GameObject.FindObjectsOfType<GGJ_Player>();
+        var players = GameObject.FindObjectsOfType<GGJ_PlayerController>();
         var averagePosition = Vector3.zero;
         foreach (var player in players)
         {

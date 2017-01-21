@@ -7,7 +7,8 @@ public class GGJ_Spawner : MonoBehaviour
     public float MaxSpawnDistance = 100.0f;
     public float SpawnTime = 2.5f;
 
-    private GGJ_Player _collidedPlayer;
+    private GGJ_SwarmController _swarmController;
+    private GGJ_PlayerController _collidedPlayer;
     private float _timeElapsedSinceLastSpawn;
     private int _spawnedCount;
 
@@ -20,11 +21,15 @@ public class GGJ_Spawner : MonoBehaviour
 
     void Start()
     {
+        // Set some defaults
         _collidedPlayer = null;
         _timeElapsedSinceLastSpawn = 0.0f;
         _spawnedCount = 0;
+
+        // Instantiate the swarm controller
+        _swarmController = gameObject.AddComponent<GGJ_SwarmController>();
     }
-    
+
     void Update()
     {
         // Check whether we're spawning yet
@@ -38,8 +43,9 @@ public class GGJ_Spawner : MonoBehaviour
                 localEnemyPosition.y = gameObject.transform.localPosition.y;
                 localEnemyPosition *= Random.Range(0.0f, MaxSpawnDistance);
 
-                // Spawn new enemy
-                Instantiate(EnemyPrefab, gameObject.transform.localPosition + localEnemyPosition, Quaternion.identity);
+                // Spawn new enemy, add default controller, and inform swarm controller
+                var enemyGameObject = Instantiate(EnemyPrefab, gameObject.transform.localPosition + localEnemyPosition, Quaternion.identity) as GameObject;
+                _swarmController.Enemies.Add(enemyGameObject.AddComponent<GGJ_EnemyController>());
                 Debug.Log(string.Format("Spawned enemy {0} of {1}.", _spawnedCount + 1, MaxSpawnCount));
 
                 // Increment the spawned count
@@ -66,6 +72,6 @@ public class GGJ_Spawner : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        _collidedPlayer = other.gameObject.GetComponent<GGJ_Player>();
+        _collidedPlayer = other.gameObject.GetComponent<GGJ_PlayerController>();
     }
 }
