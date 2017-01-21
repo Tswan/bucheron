@@ -129,7 +129,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         hpSlider.value -= damage;
 
         // Shake the camera for an amount of time dependant on the damage
-        MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
+        //MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
 	public override void OnKill(GameObject other)
@@ -214,7 +214,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     private void startHit()
     {
         _animator.SetBool("isHit", true);
-        }
+    }
 
     private void endHit()
     {
