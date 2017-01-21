@@ -21,6 +21,9 @@ public class GGJ_Currency : MonoBehaviour
     {
         _transform = gameObject.GetComponent<Transform>();
         _lifeTimer = 0.0f;
+
+        // TODO: Play sound effect for currency drop
+        Debug.Log("TODO: Play sound effect for currency drop.");
     }
 
     private void Update()

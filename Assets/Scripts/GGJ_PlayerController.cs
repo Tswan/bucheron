@@ -10,6 +10,9 @@ public class GGJ_PlayerController : GGJ_BaseController
     public GameObject Puck;
     public Slider hpSlider;
 
+    [HideInInspector]
+    public int KillCount { get; set; }
+
     private DateTime _startTime;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;

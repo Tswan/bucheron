@@ -12,6 +12,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     public float MaxViewDistance;
   
     private int _collisionCount;
+    private float _lifeTimer;
 
     private void Awake()
     {
@@ -26,24 +27,35 @@ public class GGJ_EnemyController : GGJ_BaseController
 
     public override void OnDamage(GameObject other, int damage)
     {
-        // TODO:
+        // TODO: Play sound effect enemy being damaged
+        Debug.Log("TODO: Play sound effect enemy being damaged.");
     }
 
     public override void OnKill(GameObject other)
     {
+        // Increment the player controller that killed this enemy
+        other.GetComponent<GGJ_PlayerController>().KillCount++;
+
+        // Remove this from the swarm controller
+        GameObject.FindObjectOfType<GGJ_SwarmController>().Enemies.Remove(this);
+
+        // Flip the enemy upside down
+        transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 180, transform.rotation.w);
+        myAnim.enabled = false;
+
+        // Reduce the weight of the rigid body so the explosion is very effective
+        RigidBody.mass = 0.0001f;
+
         // Drop currency
         var currencyObject = Instantiate(CurrencyDrop, gameObject.transform.position, Quaternion.identity) as GameObject;
         var direction = currencyObject.transform.position - other.transform.position;
         currencyObject.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, other.transform.position, 10.0f);
 
-        // TODO: Player sound effect for currency drop
-        Debug.Log("TODO: Play sound effect for currency drop.");
+        // Spawn a death fade timer
+        gameObject.AddComponent<GGJ_DeathFadeTimer>();
 
-        // Remove this from the swarm controller
-        GameObject.FindObjectOfType<GGJ_SwarmController>().Enemies.Remove(this);
-
-        // Destory object
-        Destroy(gameObject);
+        // Destory this controller, we are done now
+        Destroy(this);
     }
 
     private void OnCollisionEnter(Collision other)
