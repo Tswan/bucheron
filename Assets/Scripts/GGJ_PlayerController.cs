@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GGJ_PlayerController : GGJ_BaseController, IDamagable
+public class GGJ_PlayerController : GGJ_BaseController
 {
 	public Camera MainCamera;
     public int Currency;
@@ -83,7 +83,7 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
         }
     }
 
-	public void OnDamage(GameObject other, int damage)
+	public override void OnDamage(GameObject other, int damage)
     {
 		// DEBUG: Log the damage
 		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
@@ -98,7 +98,7 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
         MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
-	public void OnKill(GameObject other)
+	public override void OnKill(GameObject other)
 	{
 		// DEBUG: Log killing player
 		Debug.Log("Player has been killed.");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class GGJ_EnemyController : GGJ_BaseController, IDamagable
+public class GGJ_EnemyController : GGJ_BaseController
 {
     [HideInInspector]
     public GGJ_PlayerController MoveToPlayerController { get; set; }
@@ -24,12 +24,12 @@ public class GGJ_EnemyController : GGJ_BaseController, IDamagable
         _collisionCount = 0;
     }
 
-    public void OnDamage(GameObject other, int damage)
+    public override void OnDamage(GameObject other, int damage)
     {
         // TODO:
     }
 
-    public void OnKill(GameObject other)
+    public override void OnKill(GameObject other)
     {
         // Drop currency
         var currencyObject = Instantiate(CurrencyDrop, gameObject.transform.position, Quaternion.identity) as GameObject;

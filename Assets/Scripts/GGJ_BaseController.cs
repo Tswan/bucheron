@@ -42,4 +42,8 @@ public abstract class GGJ_BaseController : MonoBehaviour
     }
 
     protected abstract Vector3 GetMovementDirection();
+
+    public abstract void OnDamage(GameObject other, int damage);
+
+    public abstract void OnKill(GameObject other);
 }
