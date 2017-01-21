@@ -5,19 +5,26 @@ using UnityEngine.UI;
 
 public class GGJ_PlayerController : GGJ_BaseController
 {
-	public Camera MainCamera;
+    public Camera MainCamera;
     public int Currency;
     public GameObject Puck;
     public Slider hpSlider;
     public AudioClip OnHitAudio;
-    public AudioClip RunningAudio;
     public AudioClip OnSwingAudio;
     public AudioClip OnPuckAudio;
+    public AudioClip RunningAudio;
     public Text money;
     public Text pucks;
 
     [HideInInspector]
     public int KillCount { get; set; }
+
+    [HideInInspector]
+    public AudioSource OnHitAudioSource { get; private set; }
+    [HideInInspector]
+    public AudioSource OnSwingAudioSource { get; private set; }
+    [HideInInspector]
+    public AudioSource OnPuckAudioSource { get; private set; }
 
     private DateTime _startTime;
     private Animator _animator;
@@ -39,6 +46,21 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
+        OnHitAudioSource = gameObject.AddComponent<AudioSource>();
+        OnHitAudioSource.clip = OnHitAudio;
+        OnHitAudioSource.loop = false;
+        OnHitAudioSource.volume = 0.5f;
+
+        OnSwingAudioSource = gameObject.AddComponent<AudioSource>();
+        OnSwingAudioSource.clip = OnSwingAudio;
+        OnSwingAudioSource.loop = false;
+        OnSwingAudioSource.volume = 2.0f;
+
+        OnPuckAudioSource = gameObject.AddComponent<AudioSource>();
+        OnPuckAudioSource.clip = OnPuckAudio;
+        OnPuckAudioSource.loop = false;
+        OnPuckAudioSource.volume = 2.0f;
+
         _runningAudioSource = gameObject.AddComponent<AudioSource>();
         _runningAudioSource.clip = RunningAudio;
         _runningAudioSource.loop = true;
@@ -46,7 +68,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     }
 
     private void Update()
-	{
+    {
     }
 
     protected override void FixedUpdate()
@@ -111,17 +133,17 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
     }
 
-	public override void OnDamage(GameObject other, int damage)
+    public override void OnDamage(GameObject other, int damage)
     {
 
         startHit();
         if (_animator.GetBool("isBlocking") == true)
-        { 
+        {
             damage = 0;
         }
 
-		// DEBUG: Log the damage
-		Debug.Log(string.Format ("Damaging player for {0} damage.", damage));
+        // DEBUG: Log the damage
+        Debug.Log(string.Format("Damaging player for {0} damage.", damage));
 
         // TODO: Play audio
         Debug.Log("TODO: Play audio for damaging player.");
@@ -133,10 +155,10 @@ public class GGJ_PlayerController : GGJ_BaseController
         MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
-	public override void OnKill(GameObject other)
-	{
-		// DEBUG: Log killing player
-		Debug.Log("Player has been killed.");
+    public override void OnKill(GameObject other)
+    {
+        // DEBUG: Log killing player
+        Debug.Log("Player has been killed.");
 
         // TODO: Play audio
         Debug.Log("TODO: Player audio for player dying.");
@@ -144,7 +166,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         // TODO: Handle player death
         Debug.Log("TODO: Handle player death.");
     }
-    
+
     private void jump()
     {
         /*
@@ -200,7 +222,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             Stats.Ammo--;
             var newPuck = Instantiate(Puck, transform.FindChild("puckEmitter").gameObject.transform.position, Quaternion.identity) as GameObject;
-            GetComponent<AudioSource>().PlayOneShot(OnPuckAudio, 2.0f);
+            OnPuckAudioSource.Play();
             if (transform.rotation.y > 0)
             {
                 newPuck.GetComponent<puck>().shoot(50);
@@ -215,7 +237,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     private void startHit()
     {
         _animator.SetBool("isHit", true);
-        }
+    }
 
     private void endHit()
     {
@@ -224,7 +246,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     }
 
     protected override Vector3 GetMovementDirection()
-    { 
+    {
         if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
         {
             Vector3 diection = Vector3.zero;
@@ -273,7 +295,7 @@ public class GGJ_PlayerController : GGJ_BaseController
 
     private void PlayMeleeAudio()
     {
-        GetComponent<AudioSource>().PlayOneShot(OnSwingAudio, 2.0f);
+        OnSwingAudioSource.Play();
     }
 
     private void StartRunningAudio()
