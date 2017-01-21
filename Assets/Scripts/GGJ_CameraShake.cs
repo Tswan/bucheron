@@ -30,7 +30,7 @@ public class GGJ_CameraShake : MonoBehaviour
         OriginalPosition = CameraTransform.localPosition;
     }
 
-    void Update()
+	void Update()
     {
         if (ShakeTime > 0)
         {
