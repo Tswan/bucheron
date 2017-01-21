@@ -12,6 +12,14 @@ public class Beaver : GGJ_EnemyController
 	// Update is called once per frame
 	void Update () {
         base.FixedUpdate();
+        if(RigidBody.velocity.x != 0 || RigidBody.velocity.z != 0)
+        {
+            walk();
+        }
+        else
+        {
+            idle();
+        }
 	}
 
     public void idle()
