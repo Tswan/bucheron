@@ -58,10 +58,8 @@ public class GGJ_EnemyController : GGJ_BaseController
         // Spawn a death fade timer
         gameObject.AddComponent<GGJ_DeathFadeTimer>();
 
-        Destroy(gameObject); ;
-
-        // Destory this controller, we are done now
-        
+        // Destory this controller, we are done here
+        Destroy(this);
     }
 
 
