@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Spawner : MonoBehaviour
+public class GGJ_Spawner : MonoBehaviour
 {
     public GameObject EnemyPrefab;
+    public float MaxSpawnDistance = 100.0f;
+    public float SpawnTime = 2.5f;
 
     private GGJ_Player _collidedPlayer;
     private float _timeElapsedSinceLastSpawn;
     private int _spawnedCount;
 
-    public int MaxSpawnCount { get; set; }
+    public int MaxSpawnCount;
 
     void Awake()
     {
@@ -29,10 +31,15 @@ public class Spawner : MonoBehaviour
         if (_collidedPlayer != null)
         {
             // Check whether we should spawn an enemy
-            if (Mathf.Sin(_timeElapsedSinceLastSpawn) > 0.0f)
+            if (_timeElapsedSinceLastSpawn > SpawnTime)
             {
-                // Spawn enemy
-                Instantiate(EnemyPrefab, gameObject.transform.localPosition, Quaternion.identity);
+                // Calculate enemy spawn local position
+                var localEnemyPosition = Random.onUnitSphere;
+                localEnemyPosition.y = gameObject.transform.localPosition.y;
+                localEnemyPosition *= Random.Range(0.0f, MaxSpawnDistance);
+
+                // Spawn new enemy
+                Instantiate(EnemyPrefab, gameObject.transform.localPosition + localEnemyPosition, Quaternion.identity);
                 Debug.Log(string.Format("Spawned enemy {0} of {1}.", _spawnedCount + 1, MaxSpawnCount));
 
                 // Increment the spawned count
