@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
-
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GGJ_PlayerController : GGJ_BaseController, IDamagable
 {
 	public Camera MainCamera;
     public int Currency;
     public GameObject Puck;
+    public Slider hpSlider;
 
     private DateTime _startTime;
     private Animator _animator;
@@ -21,6 +22,8 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
     protected override void Start()
     {
         base.Start();
+        hpSlider.maxValue = GetComponent<Stats>().HealthMax;
+        hpSlider.value = GetComponent<Stats>().HealthMax;
         _startTime = DateTime.UtcNow;
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -37,6 +40,11 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
         _animator.SetBool("isShooting", false);
 
         base.FixedUpdate();
+
+        if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
+        {
+            _animator.SetBool("isJumping", false);
+        }
 
         if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false)
         {
@@ -83,6 +91,9 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
         // TODO: Play audio
         Debug.Log("TODO: Play audio for damaging player.");
 
+
+        hpSlider.value -= damage;
+
         // Shake the camera for an amount of time dependant on the damage
         MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
@@ -106,6 +117,9 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
 		vel.y = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z);
 		rb.AddForce (Vector3.Normalize (vel) * jumpSpeed, ForceMode.Impulse);
 		*/
+
+        _animator.SetBool("isJumping", true);
+
 
         RigidBody.AddForce(Vector3.up * Stats.JumpSpeed);
 
@@ -153,7 +167,7 @@ public class GGJ_PlayerController : GGJ_BaseController, IDamagable
     }
 
     protected override Vector3 GetMovementDirection()
-    {
+    { 
         if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
         {
             Vector3 diection = Vector3.zero;
