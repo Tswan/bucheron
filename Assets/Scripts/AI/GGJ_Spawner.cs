@@ -35,9 +35,6 @@ public class GGJ_Spawner : MonoBehaviour
 
     void Update()
     {
-        // Check whether we're spawning yet
-        if (_collidedPlayer != null)
-        {
             // Check whether we should spawn an enemy
             if (_timeElapsedSinceLastSpawn > SpawnTime)
             {
@@ -45,20 +42,9 @@ public class GGJ_Spawner : MonoBehaviour
                 var spawnCount = _swarmController.Enemies.Count;
                 if (spawnCount < MaxSpawnCount)
                 {
-                    // Calculate enemy spawn local position
-                    var localEnemyPosition = UnityEngine.Random.onUnitSphere;
-                    var size = _boxCollider.size * 0.5f;
-                    localEnemyPosition.x *= UnityEngine.Random.Range(-size.x, size.x);
-                    localEnemyPosition.y = gameObject.transform.localPosition.y;
-                    localEnemyPosition.z *= UnityEngine.Random.Range(-size.z, size.z);
-
-                    // Spawn new enemy
-                    var enemyGameObject = Instantiate(EnemyPrefab, gameObject.transform.localPosition + localEnemyPosition, Quaternion.identity) as GameObject;
+                    // Spawn a new enemy
+                    SpawnEnemy();
                     Debug.Log(string.Format("Spawned enemy {0} of {1}.", spawnCount + 1, MaxSpawnCount));
-                   
-                    // Add a new controller
-                    var enemyController = enemyGameObject.GetComponent<GGJ_EnemyController>();
-                    _swarmController.Enemies.Add(enemyController);
 
                     // Reset spawn timer
                     _timeElapsedSinceLastSpawn = 0.0f;
@@ -74,17 +60,32 @@ public class GGJ_Spawner : MonoBehaviour
                 // Increment the time
                 _timeElapsedSinceLastSpawn += Time.deltaTime;
             }
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        _collidedPlayer = other.gameObject.GetComponent<GGJ_PlayerController>() ?? _collidedPlayer;
     }
 
     public void WaveIncrease()
     {
         // TODO: Handle wave increase
         Debug.Log("TODO: Wave has increased, spawner should become harder.");
+    }
+
+    private void SpawnEnemy()
+    {
+        // Calculate enemy spawn local position
+        var localEnemyPosition = UnityEngine.Random.onUnitSphere;
+        var size = _boxCollider.size * 0.5f;
+        localEnemyPosition.x *= UnityEngine.Random.Range(-size.x, size.x);
+        localEnemyPosition.y = gameObject.transform.localPosition.y;
+        localEnemyPosition.z *= UnityEngine.Random.Range(-size.z, size.z);
+
+        // Spawn new enemy
+        var enemyGameObject = Instantiate(EnemyPrefab, gameObject.transform.localPosition + localEnemyPosition, Quaternion.identity) as GameObject;
+
+        // Add a new controller
+        var enemyController = enemyGameObject.GetComponent<GGJ_EnemyController>();
+        _swarmController.Enemies.Add(enemyController);
     }
 }
