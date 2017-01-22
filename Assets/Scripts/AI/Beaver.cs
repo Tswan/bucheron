@@ -3,57 +3,32 @@ using System.Collections;
 
 public class Beaver : GGJ_EnemyController
 {
-
-	// Use this for initialization
-	protected override void Start () {
-        base.Start();
-	}
-	
 	// Update is called once per frame
-	void Update () {
+    protected override void FixedUpdate()
+        {
         base.FixedUpdate();
-        if(RigidBody.velocity.x != 0 || RigidBody.velocity.z != 0)
-        {
-            walk();
-        }
-        else
-        {
-            idle();
-        }
-	}
 
-    public void idle()
-    {
-        myAnim.Play("beaverIdle");
-        myAnim.SetBool("isIdle", true);
+        myAnim.SetBool("isIdle", false);
         myAnim.SetBool("isAttacking", false);
         myAnim.SetBool("isWalking", false);
-    }
 
-    public void attack()
+        switch (State)
     {
+            case AIState.Idle:
+        myAnim.Play("beaverIdle");
+        myAnim.SetBool("isIdle", true);
+                break;
+
+            case AIState.Walking:
+                myAnim.Play("beaverWalk");
+                myAnim.SetBool("isWalking", true);
+                break;
+
+            case AIState.Attacking:
+            case AIState.Attacked:
+                myAnim.Play("beaverAttack");
         myAnim.SetBool("isAttacking", true);
+                break;
     }
-
-    public void walk()
-    {
-        myAnim.SetBool("isWalking", true);
     }
-
-    void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            attack();
-        }
-    }
-
-    void OnCollisionExit(Collision col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            attack();
-        }
-    }
-
 }

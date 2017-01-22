@@ -14,28 +14,33 @@ public class Stats : MonoBehaviour
 
     public int _healthCurrent;
     private bool _invincible;
-    private GGJ_BaseController _controller;
 
     // Use this for initialization
     void Start()
     {
         _healthCurrent = HealthMax;
         _invincible = false;
-        _controller = gameObject.GetComponent<GGJ_BaseController>();
     }
 
     public void TakeDamage(GameObject other, int damage)
     {
-        // Decrement health
-        _healthCurrent -= damage;
+        // Retrieve the controller
+        var controller = gameObject.GetComponent<GGJ_BaseController>();
 
-        // Call the on dmage event for the controller
-        _controller.OnDamage(other, damage);
-
-        // Check whether we should kill the parent object
-        if (_healthCurrent <= 0)
+        // Check the controller still exists, otherwise this enemy may be dead already
+        if (controller != null)
         {
-            _controller.OnKill(other);
+            // Decrement health
+            _healthCurrent -= damage;
+
+            // Call the on dmage event for the controller
+            controller.OnDamage(other, damage);
+
+            // Check whether we should kill the parent object
+            if (_healthCurrent <= 0)
+            {
+                controller.OnKill(other);
+            }
         }
     }
 }
