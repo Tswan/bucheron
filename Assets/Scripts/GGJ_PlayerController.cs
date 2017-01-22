@@ -122,7 +122,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
         if (Input.GetAxis("L") > 0)
         {
-            OnDamage(gameObject, 1);
+            
         }
         if (Input.GetAxis("R") > 0)
         {
