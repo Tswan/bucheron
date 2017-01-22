@@ -15,10 +15,7 @@ public class GGJ_PlayerController : GGJ_BaseController
     public AudioClip RunningAudio;
     public Text money;
     public Text pucks;
-
-    [HideInInspector]
-    public int KillCount { get; set; }
-
+    
     [HideInInspector]
     public AudioSource OnHitAudioSource { get; private set; }
     [HideInInspector]
@@ -32,6 +29,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private AudioSource _runningAudioSource;
+    private int _killCount;
+    private int _waveNumber;
 
     private void Awake()
     {
@@ -41,6 +40,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     protected override void Start()
     {
         base.Start();
+
+        _waveNumber = 1;
 
         hpSlider.maxValue = GetComponent<Stats>().HealthMax;
         hpSlider.value = GetComponent<Stats>().HealthMax;
@@ -310,5 +311,28 @@ public class GGJ_PlayerController : GGJ_BaseController
     private void StopRunningAudio()
     {
         _runningAudioSource.Stop();
+    }
+
+    public void IncrementKill(int amount)
+    {
+        // Increment the kill count
+        _killCount += amount;
+
+        // TODO: Increase the wave if necessary
+        Debug.Log("TODO: Check for wave increase.");
+        if (false)
+        {
+            // Increment the wave number
+            _waveNumber = 1;
+
+            // TODO: Inform the player visually of a wave increase
+            Debug.Log("TODO: Inform the player of a wave increase");
+
+            // Inform all the spawners they need to increase their waves
+            foreach (var spawner in GameObject.FindObjectsOfType<GGJ_Spawner>())
+            {
+                spawner.WaveIncrease();
+            }
+        }
     }
 }

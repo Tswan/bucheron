@@ -1,24 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+
+using UnityEngine;
 
 public class GGJ_Spawner : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    public float MaxSpawnDistance = 100.0f;
     public float SpawnTime = 2.5f;
-    public int waveSizeIncrease = 2;
-    public float WaveDelay = 3f;
-
+    public int MaxSpawnCount;
 
     private GGJ_SwarmController _swarmController;
     private GGJ_PlayerController _collidedPlayer;
     private float _timeElapsedSinceLastSpawn;
-    private float _timeElapsedSinceLastWave;
-    private int _spawnedCount;
 
-    
-
-    public int MaxSpawnCount;
+    private BoxCollider _boxCollider;
 
     void Awake()
     {
@@ -30,65 +25,48 @@ public class GGJ_Spawner : MonoBehaviour
         // Set some defaults
         _collidedPlayer = null;
         _timeElapsedSinceLastSpawn = 0.0f;
-        _spawnedCount = 0;
 
         // Instantiate the swarm controller
         _swarmController = gameObject.AddComponent<GGJ_SwarmController>();
+
+        // Retrieve the box collider for calculations later
+        _boxCollider = gameObject.GetComponent<BoxCollider>();
     }
 
     void Update()
     {
-        Debug.Log("Number of enemyes on screen " + (GameObject.FindGameObjectsWithTag("Enemy").Length - 1));
         // Check whether we're spawning yet
         if (_collidedPlayer != null)
         {
             // Check whether we should spawn an enemy
             if (_timeElapsedSinceLastSpawn > SpawnTime)
             {
-                
-
                 // Check whether we should still be running after this
-                if (_spawnedCount < MaxSpawnCount)
+                var spawnCount = _swarmController.Enemies.Count;
+                if (spawnCount < MaxSpawnCount)
                 {
-
                     // Calculate enemy spawn local position
-                    var localEnemyPosition = Random.onUnitSphere;
+                    var localEnemyPosition = UnityEngine.Random.onUnitSphere;
+                    var size = _boxCollider.size * 0.5f;
+                    localEnemyPosition.x *= UnityEngine.Random.Range(-size.x, size.x);
                     localEnemyPosition.y = gameObject.transform.localPosition.y;
-                    localEnemyPosition *= Random.Range(0.0f, MaxSpawnDistance);
+                    localEnemyPosition.z *= UnityEngine.Random.Range(-size.z, size.z);
 
                     // Spawn new enemy
                     var enemyGameObject = Instantiate(EnemyPrefab, gameObject.transform.localPosition + localEnemyPosition, Quaternion.identity) as GameObject;
-                    Debug.Log(string.Format("Spawned enemy {0} of {1}.", _spawnedCount + 1, MaxSpawnCount));
+                    Debug.Log(string.Format("Spawned enemy {0} of {1}.", spawnCount + 1, MaxSpawnCount));
                    
                     // Add a new controller
                     var enemyController = enemyGameObject.GetComponent<GGJ_EnemyController>();
                     _swarmController.Enemies.Add(enemyController);
 
-                    // Increment the spawned count
-                    _spawnedCount++;
-
                     // Reset spawn timer
                     _timeElapsedSinceLastSpawn = 0.0f;
                 }
-                else if (_spawnedCount == MaxSpawnCount && GameObject.FindGameObjectsWithTag("Enemy").Length-1 == 0)
+                else
                 {
-
-                    // Destory this as we're done with it
-                    Debug.Log(string.Format("Max spawn count reached ({0}/{1}), destorying spawner no more.", _spawnedCount, MaxSpawnCount));
-                    //Destroy(this);
-                    _timeElapsedSinceLastWave += Time.deltaTime;
-
-                   
-
-                    if (_timeElapsedSinceLastWave > WaveDelay)
-                    {
-
-                        _timeElapsedSinceLastSpawn = 0.0f;
-                        _spawnedCount = 0;
-                        MaxSpawnCount += waveSizeIncrease;
-                        Debug.Log(string.Format("New Wave! ({0}/{1}).", _spawnedCount, MaxSpawnCount));
-                    }
-
+                    // Do not spawn any more
+                    Debug.Log(string.Format("Max spawn count reached ({0}/{1}), holding off until something dies.", spawnCount, MaxSpawnCount));
                 }
             }
             else
@@ -102,5 +80,11 @@ public class GGJ_Spawner : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         _collidedPlayer = other.gameObject.GetComponent<GGJ_PlayerController>() ?? _collidedPlayer;
+    }
+
+    public void WaveIncrease()
+    {
+        // TODO: Handle wave increase
+        Debug.Log("TODO: Wave has increased, spawner should become harder.");
     }
 }
