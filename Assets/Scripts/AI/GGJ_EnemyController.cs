@@ -61,7 +61,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     protected override Vector3 GetMovementDirection()
     {
         // Check whether there's a player controller to move towards
-        if (MoveToPlayerController != null)
+        if (MoveToPlayerController != null && MoveToPlayerController.State != GGJ_PlayerController.PlayerState.Dead)
         {
             // Find direction between enemy and player
             var enemyPosition = RigidBody.transform.position;
