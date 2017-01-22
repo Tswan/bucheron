@@ -331,7 +331,7 @@ public class GGJ_PlayerController : GGJ_BaseController
             // Inform all the spawners they need to increase their waves
             foreach (var spawner in GameObject.FindObjectsOfType<GGJ_Spawner>())
             {
-                spawner.WaveIncrease();
+                spawner.WaveIncrease(_waveNumber);
             }
         }
     }
