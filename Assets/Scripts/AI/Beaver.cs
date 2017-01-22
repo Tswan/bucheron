@@ -64,7 +64,10 @@ public class Beaver : GGJ_EnemyController
                 myAnim.SetBool("isAttacking", true);
                 if (_attackTimer > MAX_ATTACK_TIME * 0.5f)
                 {
-                    TargettedPlayerController.Stats.TakeDamage(gameObject, Stats.Attack);
+                    if (CheckPlayerDistance(TargettedPlayerController))
+                    {
+                        TargettedPlayerController.Stats.TakeDamage(gameObject, Stats.Attack);
+                    }
                     TargettedPlayerController = null;
                     _state = AIState.Attacked;
                 }
@@ -95,5 +98,21 @@ public class Beaver : GGJ_EnemyController
             case AIState.Walking:
                 return base.GetMovementDirection();
         }
+    }
+
+    private bool CheckPlayerDistance(GGJ_PlayerController playerController)
+    {
+        // Find direction between enemy and player
+        var enemyPosition = RigidBody.transform.position;
+        var playerPosition = playerController.GetComponent<Rigidbody>().transform.position;
+        var direction = playerPosition - enemyPosition;
+
+        // Check the distance between the enemy and any object between them and the player (including the player)
+        var raycastHit = new RaycastHit();
+        var raycastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
+
+        // If we're too close to another object, don't move
+        var controller = raycastHit.collider.GetComponent<GGJ_BaseController>();
+        return raycastResult && controller is GGJ_PlayerController && raycastHit.distance < 2.5f;
     }
 }
