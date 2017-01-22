@@ -13,8 +13,10 @@ public class GGJ_PlayerController : GGJ_BaseController
     public AudioClip OnSwingAudio;
     public AudioClip OnPuckAudio;
     public AudioClip RunningAudio;
-    public Text money;
-    public Text pucks;
+
+    public Text Money;
+    public Text Pucks;
+    public Text WaveNumber;
     
     [HideInInspector]
     public AudioSource OnHitAudioSource { get; private set; }
@@ -42,6 +44,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         base.Start();
 
         _waveNumber = 1;
+        WaveNumber.text = _waveNumber.ToString();
 
         hpSlider.maxValue = GetComponent<Stats>().HealthMax;
         hpSlider.value = GetComponent<Stats>().HealthMax;
@@ -86,8 +89,8 @@ public class GGJ_PlayerController : GGJ_BaseController
         _animator.SetBool("isWaving", false);
         _animator.SetBool("isBlocking", false);
 
-        money.text = Currency.ToString();
-        pucks.text = Stats.Ammo.ToString();
+        Money.text = Currency.ToString();
+        Pucks.text = Stats.Ammo.ToString();
 
         base.FixedUpdate();
 
@@ -323,7 +326,8 @@ public class GGJ_PlayerController : GGJ_BaseController
         if (_killCount > 5)
         {
             // Increment the wave number
-            _waveNumber = 1;
+            _waveNumber++;
+            WaveNumber.text = _waveNumber.ToString();
 
             // TODO: Inform the player visually of a wave increase
             Debug.Log("TODO: Inform the player of a wave increase");
