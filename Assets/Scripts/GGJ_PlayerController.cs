@@ -339,8 +339,6 @@ public class GGJ_PlayerController : GGJ_BaseController
     public void buyCoffee()
     {
 
-      
-
         for (float x = Stats._healthCurrent / 10; x < 10; x++)
         {
 

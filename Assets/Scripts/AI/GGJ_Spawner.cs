@@ -121,8 +121,9 @@ public class GGJ_Spawner : MonoBehaviour
         _swarmController.Enemies.Add(enemyController);
 
         // Modify the enemies stats according to the multipliers
-        enemyController.Stats.Attack = (int)Math.Round(enemyController.Stats.Attack * _damageMultipler);
-        enemyController.Stats.HealthMax = (int)Math.Round(enemyController.Stats.HealthMax * _healthMultipler);
-        enemyController.Stats._healthCurrent = enemyController.Stats.HealthMax;
+        var enemyStats = enemyController.GetComponent<Stats>();
+        enemyStats.Attack = (int)Math.Round(enemyStats.Attack * _damageMultipler);
+        enemyStats.HealthMax = (int)Math.Round(enemyStats.HealthMax * _healthMultipler);
+        enemyStats._healthCurrent = enemyStats.HealthMax;
     }
 }
