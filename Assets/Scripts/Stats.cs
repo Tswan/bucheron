@@ -12,13 +12,13 @@ public class Stats : MonoBehaviour
 
     public int Ammo;
 
-    public int _healthCurrent;
+    public int HealthCurrent;
     private bool _invincible;
 
     // Use this for initialization
     void Start()
     {
-        _healthCurrent = HealthMax;
+        HealthCurrent = HealthMax;
         _invincible = false;
     }
 
@@ -31,13 +31,13 @@ public class Stats : MonoBehaviour
         if (controller != null)
         {
             // Decrement health
-            _healthCurrent -= damage;
+            HealthCurrent -= damage;
 
             // Call the on dmage event for the controller
             controller.OnDamage(other, damage);
 
             // Check whether we should kill the parent object
-            if (_healthCurrent <= 0)
+            if (HealthCurrent <= 0)
             {
                 controller.OnKill(other);
             }

@@ -125,6 +125,6 @@ public class GGJ_Spawner : MonoBehaviour
         var enemyStats = enemyController.GetComponent<Stats>();
         enemyStats.Attack = (int)Math.Round(enemyStats.Attack * _damageMultipler);
         enemyStats.HealthMax = (int)Math.Round(enemyStats.HealthMax * _healthMultipler);
-        enemyStats._healthCurrent = enemyStats.HealthMax;
+        enemyStats.HealthCurrent = enemyStats.HealthMax;
     }
 }
