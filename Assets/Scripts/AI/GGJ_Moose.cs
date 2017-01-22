@@ -36,13 +36,13 @@ public class GGJ_Moose : GGJ_EnemyController
     }
 
     // Update is called once per frame
-    protected override void FixedUpdate()
+    private void Update()
     {
+        _chargeTimer += Time.deltaTime;
+
         myAnim.SetBool("isIdle", false);
         myAnim.SetBool("isAttacking", false);
         myAnim.SetBool("isWalking", false);
-
-        base.FixedUpdate();
 
         switch (_state)
         {
@@ -57,7 +57,6 @@ public class GGJ_Moose : GGJ_EnemyController
                 break;
 
             case AIState.PlayerSeen:
-                _chargeTimer += Time.fixedDeltaTime;
                 if (_chargeTimer > MaxChargeTime)
                 {
                     _chargeDirection = GetMovementDirection();
@@ -69,7 +68,6 @@ public class GGJ_Moose : GGJ_EnemyController
                 break;
 
             case AIState.Charging:
-                _chargeTimer += Time.fixedDeltaTime;
                 if (_chargeTimer > ChargeWaitTime)
                 {
                     if (_chargeTimer > ChargeWaitTime + MaxChargeTime)

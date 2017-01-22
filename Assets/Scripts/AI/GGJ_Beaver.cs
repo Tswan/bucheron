@@ -24,11 +24,9 @@ public class GGJ_Beaver : GGJ_EnemyController
     }
 
     // Update is called once per frame
-    protected override void FixedUpdate()
+    private void Update()
     {
         _attackTimer += Time.deltaTime;
-
-        base.FixedUpdate();
 
         myAnim.SetBool("isIdle", false);
         myAnim.SetBool("isAttacking", false);
