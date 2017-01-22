@@ -153,10 +153,13 @@ public class GGJ_Moose : GGJ_EnemyController
     private void OnCollisionEnter(Collision other)
     {
         // If we hit anything that isn't the player, stop charging immediately
-        var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
-        if (playerController == null && _state == AIState.Charging && _chargeTimer > ChargeWaitTime)
+        if (!(other.collider is TerrainCollider))
         {
-            _state = AIState.Idle;
+            var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
+            if (playerController == null && _state == AIState.Charging && _chargeTimer > ChargeWaitTime)
+            {
+                _state = AIState.Idle;
+            }
         }
     }
 
