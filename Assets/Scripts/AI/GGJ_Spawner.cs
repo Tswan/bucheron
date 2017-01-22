@@ -118,6 +118,7 @@ public class GGJ_Spawner : MonoBehaviour
 
         // Add a new controller
         var enemyController = enemyGameObject.GetComponent<GGJ_EnemyController>();
+        enemyController.SwarmController = _swarmController;
         _swarmController.Enemies.Add(enemyController);
 
         // Modify the enemies stats according to the multipliers

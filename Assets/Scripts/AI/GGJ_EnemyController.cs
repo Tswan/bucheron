@@ -8,10 +8,12 @@ public class GGJ_EnemyController : GGJ_BaseController
     [HideInInspector]
     public GGJ_PlayerController MoveToPlayerController { get; set; }
 
+    [HideInInspector]
+    public GGJ_SwarmController SwarmController { get; set; }
+
     public GameObject CurrencyDrop;
     public float MaxViewDistance;
     public AudioClip DeathAudio;
-
     protected GGJ_PlayerController TargettedPlayerController { get; set; }
 
     private void Awake()
@@ -32,7 +34,7 @@ public class GGJ_EnemyController : GGJ_BaseController
         other.gameObject.GetComponent<GGJ_PlayerController>().IncrementKill(1);
 
         // Remove this from the swarm controller
-        GameObject.FindObjectOfType<GGJ_SwarmController>().Enemies.Remove(this);
+        SwarmController.Enemies.Remove(this);
 
         // Flip the enemy upside down
         transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 180, transform.rotation.w);
