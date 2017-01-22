@@ -1,61 +1,57 @@
 fileFormatVersion: 2
-guid: 46fa7fd461f27b14cb201b05d9318df7
-timeCreated: 1485062885
+guid: 318e8e22bb4ce0c44a6c6e26181254f1
+timeCreated: 1485058857
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: group6
-    100004: pCube13
-    100006: pCube14
-    100008: pCube15
-    100010: polySurface12
-    100012: polySurface13
-    100014: polySurface14
-    100016: polySurface15
-    100018: polySurface16
-    100020: polySurface17
-    100022: polySurface23
+    100002: pCube13
+    100004: pCube14
+    100006: pCube15
+    100008: polySurface1
+    100010: polySurface2
+    100012: polySurface3
+    100014: polySurface4
+    100016: polySurface5
+    100018: typeMesh5
     400000: //RootNode
-    400002: group6
-    400004: pCube13
-    400006: pCube14
-    400008: pCube15
-    400010: polySurface12
-    400012: polySurface13
-    400014: polySurface14
-    400016: polySurface15
-    400018: polySurface16
-    400020: polySurface17
-    400022: polySurface23
+    400002: pCube13
+    400004: pCube14
+    400006: pCube15
+    400008: polySurface1
+    400010: polySurface2
+    400012: polySurface3
+    400014: polySurface4
+    400016: polySurface5
+    400018: typeMesh5
     2300000: pCube13
     2300002: pCube14
     2300004: pCube15
-    2300006: polySurface13
-    2300008: polySurface14
-    2300010: polySurface15
-    2300012: polySurface16
-    2300014: polySurface17
-    2300016: polySurface23
+    2300006: polySurface1
+    2300008: polySurface2
+    2300010: polySurface3
+    2300012: polySurface4
+    2300014: polySurface5
+    2300016: typeMesh5
     3300000: pCube13
     3300002: pCube14
     3300004: pCube15
-    3300006: polySurface13
-    3300008: polySurface14
-    3300010: polySurface15
-    3300012: polySurface16
-    3300014: polySurface17
-    3300016: polySurface23
+    3300006: polySurface1
+    3300008: polySurface2
+    3300010: polySurface3
+    3300012: polySurface4
+    3300014: polySurface5
+    3300016: typeMesh5
     4300000: pCube14
     4300002: pCube13
-    4300004: pCube15
-    4300006: polySurface17
-    4300008: polySurface16
-    4300010: polySurface15
-    4300012: polySurface14
-    4300014: polySurface13
-    4300016: polySurface23
+    4300004: polySurface5
+    4300006: typeMesh5
+    4300008: pCube15
+    4300010: polySurface4
+    4300012: polySurface3
+    4300014: polySurface2
+    4300016: polySurface1
   materials:
     importMaterials: 1
     materialName: 0

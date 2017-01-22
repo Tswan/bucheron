@@ -115,7 +115,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         }
         if (Input.GetAxis("A") > 0)
         {
-            block();
+            //block();
         }
         if (Input.GetAxis("X") > 0)
         {
@@ -335,4 +335,35 @@ public class GGJ_PlayerController : GGJ_BaseController
             }
         }
     }
+
+    public void buyCoffee()
+    {
+
+      
+
+        for (float x = Stats._healthCurrent / 10; x < 10; x++)
+        {
+
+            if (Currency > 0)
+            {
+                Currency -= 1;
+                Stats._healthCurrent += 10;
+                if (Stats._healthCurrent > Stats.HealthMax)
+                {
+                    Stats._healthCurrent = Stats.HealthMax;
+                }
+            }
+        }
+      
+        for (int x = Stats.Ammo; x < 10; x++)
+        {
+            if(Currency > 0)
+            { 
+                Currency -= 1;
+                Stats.Ammo += 1;
+            }
+        }
+
+    }
+
 }

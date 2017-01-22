@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 41e8a730722c05e4b90a0ec0c6cac443
-timeCreated: 1485062888
+guid: 083d141b1d203fa498eeeb91d11a357a
+timeCreated: 1485058713
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -28,8 +28,8 @@ ModelImporter:
     100040: pCube9
     100042: pCube9 1
     100044: pCube9 2
-    100046: polySurface11
-    100048: //RootNode
+    100046: //RootNode
+    100048: typeMesh3
     400000: group1
     400002: group2
     400004: group3
@@ -53,8 +53,8 @@ ModelImporter:
     400040: pCube9
     400042: pCube9 1
     400044: pCube9 2
-    400046: polySurface11
-    400048: //RootNode
+    400046: //RootNode
+    400048: typeMesh3
     2300000: pCube10
     2300002: pCube11
     2300004: pCube11 1
@@ -75,7 +75,7 @@ ModelImporter:
     2300034: pCube9
     2300036: pCube9 1
     2300038: pCube9 2
-    2300040: polySurface11
+    2300040: typeMesh3
     3300000: pCube10
     3300002: pCube11
     3300004: pCube11 1
@@ -96,9 +96,9 @@ ModelImporter:
     3300034: pCube9
     3300036: pCube9 1
     3300038: pCube9 2
-    3300040: polySurface11
-    4300000: polySurface11
-    4300002: pCube5
+    3300040: typeMesh3
+    4300000: pCube5
+    4300002: typeMesh3
     4300004: pCube6
     4300006: pCube7
     4300008: pCube8

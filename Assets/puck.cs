@@ -25,4 +25,19 @@ public class puck : MonoBehaviour {
         Destroy(gameObject);
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Enemy")
+        {
+            explode(col.gameObject);
+        }
+    }
+
+    private void explode(GameObject target)
+    {
+        target.GetComponent<Rigidbody>().AddExplosionForce(500, transform.position, 500.0f, 10.0f);
+        Destroy(gameObject);
+
+    }
+
 }
