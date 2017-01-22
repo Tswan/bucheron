@@ -102,6 +102,7 @@ public class GGJ_PlayerController : GGJ_BaseController
 
     private void Update()
     {
+        hpSlider.value = Stats.HealthCurrent;
     }
 
     protected override void FixedUpdate()

@@ -74,7 +74,7 @@ public class GGJ_Spawner : MonoBehaviour
     public void WaveIncrease(int waveNumber)
     {
         // Increase the max number by wave number
-        MaxSpawnCount += waveNumber;
+        //MaxSpawnCount += waveNumber;
 
         // Spawn up to the max number of enemies
         var maxCount = MaxSpawnCount - _swarmController.Enemies.Count;
