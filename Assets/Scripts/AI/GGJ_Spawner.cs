@@ -8,6 +8,8 @@ public class GGJ_Spawner : MonoBehaviour
     public GameObject EnemyPrefab;
     public float SpawnTime = 2.5f;
     public int MaxSpawnCount;
+    public float HealthMultiplierIncrease = 1.0f;
+    public float DamageMultiplerIncrease = 0.25f;
 
     private GGJ_SwarmController _swarmController;
     private float _timeElapsedSinceLastSpawn;
@@ -93,12 +95,12 @@ public class GGJ_Spawner : MonoBehaviour
         // Check if super special wave, time to make enemies tougher
         else if (waveNumber % 5 == 0)
         {
-            _healthMultipler += 1.0f;
+            _healthMultipler += HealthMultiplierIncrease;
         }
         // Check if even wave, time to make enemies harder
         else if (waveNumber % 2 == 0)
         {
-            _damageMultipler += 0.25f;
+            _damageMultipler += DamageMultiplerIncrease;
         }
     }
 
