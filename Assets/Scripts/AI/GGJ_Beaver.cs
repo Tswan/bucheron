@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Beaver : GGJ_EnemyController
+public class GGJ_Beaver : GGJ_EnemyController
 {
     private const float MAX_ATTACK_TIME = 2.0f / 3.0f;
 
