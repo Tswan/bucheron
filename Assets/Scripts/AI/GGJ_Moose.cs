@@ -175,7 +175,6 @@ public class GGJ_Moose : GGJ_EnemyController
     public void attack()
     {
         return;
-        print("MOOOOSE");
         Vector3 targetPos = GameObject.FindGameObjectWithTag("Player").transform.position;
         Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, targetPos.z), 20);
     }
