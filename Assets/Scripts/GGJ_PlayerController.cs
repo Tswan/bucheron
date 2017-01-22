@@ -191,7 +191,7 @@ public class GGJ_PlayerController : GGJ_BaseController
             Debug.Log("TODO: Play audio for damaging player.");
 
             // Decrement the HP slider
-            hpSlider.value -= damage;
+			hpSlider.value = Stats._healthCurrent;//damage;
 
             // Shake the camera for an amount of time dependant on the damage
             var cameraShake = MainCamera.GetComponent<GGJ_CameraShake>();
