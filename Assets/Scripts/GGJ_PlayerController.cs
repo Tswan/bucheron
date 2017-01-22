@@ -175,6 +175,9 @@ public class GGJ_PlayerController : GGJ_BaseController
 
         // TODO: Handle player death
         Debug.Log("TODO: Handle player death.");
+		if (_animator.GetBool ("isDead") == false)
+			_animator.SetBool("isDead", true);
+
     }
 
     private void jump()
@@ -246,12 +249,14 @@ public class GGJ_PlayerController : GGJ_BaseController
 
     private void startHit()
     {
-        _animator.SetBool("isHit", true);
+		if(_animator.GetBool("isDead") == false)
+       		 _animator.SetBool("isHit", true);
     }
 
     private void endHit()
     {
-        _animator.SetBool("isHit", false);
+		if(Stats._healthCurrent > 0)
+       		_animator.SetBool("isHit", false);
     }
 
     protected override Vector3 GetMovementDirection()
