@@ -106,11 +106,11 @@ public class GGJ_PlayerController : GGJ_BaseController
             _animator.SetBool("isJumping", false);
         }
 
-        if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false)
+		if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false || Input.GetKey(KeyCode.M) &&  _animator.GetBool("isJumping") == false )
         {
             meleeAttack();
         }
-        if (Input.GetAxis("B") > 0)
+		if (Input.GetAxis("B") > 0 || Input.GetKey(KeyCode.Space))
         {
             if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f && _animator.GetBool("isSwinging") == false)
             {
@@ -121,7 +121,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             //block();
         }
-        if (Input.GetAxis("X") > 0)
+		if (Input.GetAxis("X") > 0 || Input.GetKey(KeyCode.N))
         {
             rangedAttack();
         }
