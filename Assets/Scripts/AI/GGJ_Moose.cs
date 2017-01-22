@@ -40,18 +40,18 @@ public class GGJ_Moose : GGJ_EnemyController
     protected override void FixedUpdate()
     {
 
-    }
+	}
+
     private void Update()
     {
         _chargeTimer += Time.deltaTime;
-
 
         myAnim.SetBool("isIdle", false);
         myAnim.SetBool("isAttacking", false);
         myAnim.SetBool("isWalking", false);
 
-        base.FixedUpdate();
 
+        base.FixedUpdate();
 
         switch (_state)
         {
@@ -66,6 +66,7 @@ public class GGJ_Moose : GGJ_EnemyController
                 break;
 
             case AIState.PlayerSeen:
+				
                 _chargeTimer += Time.fixedDeltaTime;
 
                 if (_chargeTimer > MaxChargeTime)
