@@ -27,7 +27,9 @@ public class moose : GGJ_EnemyController
 
     public void attack()
     {
-        myAnim.SetBool("isAttacking", true);
+        print("MOOOOSE");
+        Vector3 targetPos = GameObject.FindGameObjectWithTag("Player").transform.position;
+        Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, targetPos.z), 20);
     }
 
     public void walk()
