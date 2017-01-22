@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class GGJ_EnemyController : GGJ_BaseController
 {
+    protected const float MAX_ATTACK_TIME = 1.5f;
+
+    protected enum AIState
+    {
+        Idle,
+        Walking,
+        Attacking,
+        Attacked,
+    };
+
     [HideInInspector]
     public GGJ_PlayerController MoveToPlayerController { get; set; }
 
@@ -12,7 +22,8 @@ public class GGJ_EnemyController : GGJ_BaseController
     public float MaxViewDistance;
     public AudioClip DeathAudio;
 
-    private int _collisionCount;
+    protected AIState State { get; private set; }
+    private float _attackTimer;
 
     private void Awake()
     {
@@ -22,7 +33,32 @@ public class GGJ_EnemyController : GGJ_BaseController
     protected override void Start()
     {
         base.Start();
-        _collisionCount = 0;
+        
+        State = AIState.Idle;
+        _attackTimer = 0.0f;
+    }
+
+    private void Update()
+    {
+        // Check the state
+        _attackTimer += Time.deltaTime;
+        switch (State)
+        {
+            case AIState.Attacking:
+                if (_attackTimer > MAX_ATTACK_TIME * 0.5f)
+                {
+                    State = AIState.Attacked;
+                }
+                break;
+
+            case AIState.Attacked:
+                if (_attackTimer > MAX_ATTACK_TIME)
+                {
+                    State = AIState.Idle;
+                }
+                break;
+
+        }
     }
 
     public override void OnDamage(GameObject other, int damage)
@@ -62,51 +98,51 @@ public class GGJ_EnemyController : GGJ_BaseController
         Destroy(this);
     }
 
-
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.GetComponent<GGJ_BaseController>() != null)
-        {
-            _collisionCount++;
-        }
-    }
-
-    private void OnCollisionStay(Collision other)
-    {
-        //_shouldMove = false;
-    }
-
-    private void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.GetComponent<GGJ_BaseController>() != null)
-        {
-            _collisionCount--;
-        }
-    }
-
     protected override Vector3 GetMovementDirection()
     {
-        // Check whether there's a player controller to move towards
-        if (MoveToPlayerController != null)
+        // Check the state
+        switch (State)
         {
-            // Find direction between enemy and player
-            var enemyPosition = RigidBody.transform.position;
-            var playerPosition = MoveToPlayerController.GetComponent<Rigidbody>().transform.position;
-            var direction = playerPosition - enemyPosition;
+            case AIState.Attacked:
+            case AIState.Attacking:
+                return Vector3.zero;
 
-            // Check the distance between the enemy and any object between them and the player (including the player)
-            var raycastHit = new RaycastHit();
-            var racastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
+            default:
+            case AIState.Idle:
+            case AIState.Walking:
+                // Check whether there's a player controller to move towards
+                if (MoveToPlayerController != null)
+                {
+                    // Find direction between enemy and player
+                    var enemyPosition = RigidBody.transform.position;
+                    var playerPosition = MoveToPlayerController.GetComponent<Rigidbody>().transform.position;
+                    var direction = playerPosition - enemyPosition;
 
-            // If we're too close to another object, don't move
-            if (_collisionCount <= 0 || !racastResult || raycastHit.collider.GetComponent<GGJ_PlayerController>() != null)
-            {
-                // Move toward the player
-                return Vector3.Normalize(new Vector3(direction.x, 0.0f, direction.z));
-            }
+                    // Check the distance between the enemy and any object between them and the player (including the player)
+                    var raycastHit = new RaycastHit();
+                    var racastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
+
+                    // If we're too close to another object, don't move
+                    var controller = raycastHit.collider.GetComponent<GGJ_BaseController>();
+                    if (racastResult && controller is GGJ_PlayerController && raycastHit.distance < 2.5f)
+                    {
+                        // Move into the attack state
+                        State = AIState.Attacking;
+                        _attackTimer = 0.0f;
+                        (controller as GGJ_PlayerController).Stats.TakeDamage(gameObject, Stats.Attack);
+                        return Vector3.zero;
+                    }
+                    else if (!racastResult || controller == null || raycastHit.distance > 2.5f)
+                    {
+                        // Move toward the player
+                        State = AIState.Walking;
+                        return Vector3.Normalize(new Vector3(direction.x, 0.0f, direction.z));
+                    }
+                }
+
+                // Don't move
+                State = AIState.Idle;
+                return Vector3.zero;
         }
-
-        // Don't move
-        return Vector3.zero;
     }
 }
