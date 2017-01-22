@@ -117,7 +117,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             case PlayerState.Dead:
                 _animator.SetBool("isDead", true);
-                if (Input.GetAxis("Start") > 0)
+				if (Input.GetAxis("Start") > 0 || Input.GetKey(KeyCode.Return))
                 {
                     ResetDefaults();
                 }
@@ -205,19 +205,25 @@ public class GGJ_PlayerController : GGJ_BaseController
     }
 
     public override void OnKill(GameObject other)
-    {
+	{
+		
         // Check the state 
         if (State != PlayerState.Dead)
         {
             // DEBUG: Log killing player
-            Debug.Log("Player has been killed.");
+
+			_animator.SetBool ("isDead", true);
+
+
 
             // TODO: Play audio
             Debug.Log("TODO: Player audio for player dying.");
 
             // Handle player death
             State = PlayerState.Dead;
-            _animator.SetBool("isDead", true);
+            
+            WaveAnnouncement.text = string.Format("You Have Died, Press Start...");
+
             WaveAnnouncement.text = string.Format("You Have Died{0}Press Start...", Environment.NewLine);
             var fadeTextInOut = WaveAnnouncement.gameObject.AddComponent<GGJ_FadeTextInOut>();
             fadeTextInOut.FadeTime = 1.0f;
