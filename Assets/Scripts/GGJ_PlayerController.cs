@@ -318,9 +318,9 @@ public class GGJ_PlayerController : GGJ_BaseController
         // Increment the kill count
         _killCount += amount;
 
-        // TODO: Increase the wave if necessary
-        Debug.Log("TODO: Check for wave increase.");
-        if (false)
+        // Increase the wave if necessary
+        Debug.Log("TODO: Make wave check more intelligent, more fun: just better.");
+        if (_killCount > 5)
         {
             // Increment the wave number
             _waveNumber = 1;
