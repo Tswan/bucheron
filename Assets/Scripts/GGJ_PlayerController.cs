@@ -115,7 +115,7 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             case PlayerState.Dead:
                 _animator.SetBool("isDead", true);
-                if (Input.GetAxis("Start") > 0)
+				if (Input.GetAxis("Start") > 0 || Input.GetKey(KeyCode.Return))
                 {
                     ResetDefaults();
                 }
