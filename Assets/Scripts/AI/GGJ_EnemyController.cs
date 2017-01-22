@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GGJ_EnemyController : GGJ_BaseController
 {
-    protected const float MAX_ATTACK_TIME = 1.5f;
+    protected const float MAX_ATTACK_TIME = 2.0f / 3.0f;
 
     protected enum AIState
     {
@@ -21,10 +21,10 @@ public class GGJ_EnemyController : GGJ_BaseController
     public GameObject CurrencyDrop;
     public float MaxViewDistance;
     public AudioClip DeathAudio;
-  
+
     protected AIState State { get; private set; }
     private float _attackTimer;
-
+    private GGJ_PlayerController _targettedPlayerController;
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -33,7 +33,7 @@ public class GGJ_EnemyController : GGJ_BaseController
     protected override void Start()
     {
         base.Start();
-        
+
         State = AIState.Idle;
         _attackTimer = 0.0f;
     }
@@ -47,6 +47,8 @@ public class GGJ_EnemyController : GGJ_BaseController
             case AIState.Attacking:
                 if (_attackTimer > MAX_ATTACK_TIME * 0.5f)
                 {
+                    _targettedPlayerController.Stats.TakeDamage(gameObject, Stats.Attack);
+                    _targettedPlayerController = null;
                     State = AIState.Attacked;
                 }
                 break;
@@ -110,39 +112,39 @@ public class GGJ_EnemyController : GGJ_BaseController
             default:
             case AIState.Idle:
             case AIState.Walking:
-        // Check whether there's a player controller to move towards
-        if (MoveToPlayerController != null)
-        {
-            // Find direction between enemy and player
-            var enemyPosition = RigidBody.transform.position;
-            var playerPosition = MoveToPlayerController.GetComponent<Rigidbody>().transform.position;
-            var direction = playerPosition - enemyPosition;
+                // Check whether there's a player controller to move towards
+                if (MoveToPlayerController != null)
+                {
+                    // Find direction between enemy and player
+                    var enemyPosition = RigidBody.transform.position;
+                    var playerPosition = MoveToPlayerController.GetComponent<Rigidbody>().transform.position;
+                    var direction = playerPosition - enemyPosition;
 
-            // Check the distance between the enemy and any object between them and the player (including the player)
-            var raycastHit = new RaycastHit();
-            var racastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
-            
-            // If we're too close to another object, don't move
+                    // Check the distance between the enemy and any object between them and the player (including the player)
+                    var raycastHit = new RaycastHit();
+                    var racastResult = Physics.Raycast(enemyPosition, direction, out raycastHit);
+
+                    // If we're too close to another object, don't move
                     var controller = raycastHit.collider.GetComponent<GGJ_BaseController>();
                     if (racastResult && controller is GGJ_PlayerController && raycastHit.distance < 2.5f)
                     {
                         // Move into the attack state
                         State = AIState.Attacking;
+                        _targettedPlayerController = controller as GGJ_PlayerController;
                         _attackTimer = 0.0f;
-                        (controller as GGJ_PlayerController).Stats.TakeDamage(gameObject, Stats.Attack);
                         return Vector3.zero;
                     }
                     else if (!racastResult || controller == null || raycastHit.distance > 2.5f)
-            {
-                // Move toward the player
+                    {
+                        // Move toward the player
                         State = AIState.Walking;
-                return Vector3.Normalize(new Vector3(direction.x, 0.0f, direction.z));
-            }
-        }
+                        return Vector3.Normalize(new Vector3(direction.x, 0.0f, direction.z));
+                    }
+                }
 
-        // Don't move
+                // Don't move
                 State = AIState.Idle;
-        return Vector3.zero;
+                return Vector3.zero;
+        }
     }
-}
 }
