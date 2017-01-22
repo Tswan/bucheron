@@ -17,7 +17,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     public Text Money;
     public Text Pucks;
     public Text WaveNumber;
-    
+    public Text WaveAnnouncement;
+
     [HideInInspector]
     public AudioSource OnHitAudioSource { get; private set; }
     [HideInInspector]
@@ -43,8 +44,8 @@ public class GGJ_PlayerController : GGJ_BaseController
     {
         base.Start();
 
-        _waveNumber = 1;
-        WaveNumber.text = _waveNumber.ToString();
+        _waveNumber = 0;
+        IncrementWave(1);
 
         hpSlider.maxValue = GetComponent<Stats>().HealthMax;
         hpSlider.value = GetComponent<Stats>().HealthMax;
@@ -105,11 +106,11 @@ public class GGJ_PlayerController : GGJ_BaseController
             _animator.SetBool("isJumping", false);
         }
 
-        if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false)
+		if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false || Input.GetKey(KeyCode.M) &&  _animator.GetBool("isJumping") == false )
         {
             meleeAttack();
         }
-        if (Input.GetAxis("B") > 0)
+		if (Input.GetAxis("B") > 0 || Input.GetKey(KeyCode.Space))
         {
             if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f && _animator.GetBool("isSwinging") == false)
             {
@@ -120,13 +121,13 @@ public class GGJ_PlayerController : GGJ_BaseController
         {
             //block();
         }
-        if (Input.GetAxis("X") > 0)
+		if (Input.GetAxis("X") > 0 || Input.GetKey(KeyCode.N))
         {
             rangedAttack();
         }
         if (Input.GetAxis("L") > 0)
         {
-            
+
         }
         if (Input.GetAxis("R") > 0)
         {
@@ -323,14 +324,10 @@ public class GGJ_PlayerController : GGJ_BaseController
 
         // Increase the wave if necessary
         Debug.Log("TODO: Make wave check more intelligent, more fun: just better.");
-        if (_killCount > 5)
+        if (_killCount % 10 == 0)
         {
             // Increment the wave number
-            _waveNumber++;
-            WaveNumber.text = _waveNumber.ToString();
-
-            // TODO: Inform the player visually of a wave increase
-            Debug.Log("TODO: Inform the player of a wave increase");
+            IncrementWave(1);
 
             // Inform all the spawners they need to increase their waves
             foreach (var spawner in GameObject.FindObjectsOfType<GGJ_Spawner>())
@@ -338,6 +335,17 @@ public class GGJ_PlayerController : GGJ_BaseController
                 spawner.WaveIncrease(_waveNumber);
             }
         }
+    }
+
+    private void IncrementWave(int amount)
+    {
+        _waveNumber += amount;
+        WaveNumber.text = _waveNumber.ToString();
+
+        WaveAnnouncement.text = string.Format("Wave #{0}", _waveNumber);
+        var fadeTextInOut = WaveAnnouncement.gameObject.AddComponent<GGJ_FadeTextInOut>();
+        fadeTextInOut.FadeTime = 1.0f;
+        fadeTextInOut.LifeTime = 3.0f;
     }
 
     public void buyCoffee()
@@ -356,11 +364,11 @@ public class GGJ_PlayerController : GGJ_BaseController
                 }
             }
         }
-      
+
         for (int x = Stats.Ammo; x < 10; x++)
         {
-            if(Currency > 0)
-            { 
+            if (Currency > 0)
+            {
                 Currency -= 1;
                 Stats.Ammo += 1;
             }

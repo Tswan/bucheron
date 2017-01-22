@@ -24,11 +24,9 @@ public class GGJ_Goose : GGJ_EnemyController
     }
 
     // Update is called once per frame
-    protected override void FixedUpdate()
+    private void Update()
     {
         _attackTimer += Time.deltaTime;
-
-        base.FixedUpdate();
 
         myAnim.SetBool("isIdle", false);
         myAnim.SetBool("isAttacking", false);
@@ -43,12 +41,12 @@ public class GGJ_Goose : GGJ_EnemyController
                 {
                     if (direction == Vector3.zero)
                     {
-                        myAnim.Play("beaverIdle");
+                        myAnim.Play("gooseIdle");
                         myAnim.SetBool("isIdle", true);
                     }
                     else
                     {
-                        myAnim.Play("beaverWalk");
+                        myAnim.Play("gooseWalk");
                         myAnim.SetBool("isWalking", true);
                     }
                 }
@@ -60,7 +58,7 @@ public class GGJ_Goose : GGJ_EnemyController
                 break;
 
             case AIState.Attacking:
-                myAnim.Play("beaverAttack");
+                myAnim.Play("gooseAttack");
                 myAnim.SetBool("isAttacking", true);
                 if (_attackTimer > MAX_ATTACK_TIME * 0.5f)
                 {
@@ -74,7 +72,7 @@ public class GGJ_Goose : GGJ_EnemyController
                 break;
 
             case AIState.Attacked:
-                myAnim.Play("beaverAttack");
+                myAnim.Play("gooseAttack");
                 myAnim.SetBool("isAttacking", true);
                 if (_attackTimer > MAX_ATTACK_TIME)
                 {
