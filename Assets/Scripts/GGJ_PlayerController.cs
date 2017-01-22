@@ -216,7 +216,7 @@ public class GGJ_PlayerController : GGJ_BaseController
             // Handle player death
             State = PlayerState.Dead;
             _animator.SetBool("isDead", true);
-            WaveAnnouncement.text = string.Format("You Have Died, Press Start...");
+            WaveAnnouncement.text = string.Format("You Have Died{0}Press Start...", Environment.NewLine);
             var fadeTextInOut = WaveAnnouncement.gameObject.AddComponent<GGJ_FadeTextInOut>();
             fadeTextInOut.FadeTime = 1.0f;
             fadeTextInOut.LifeTime = float.MaxValue;
