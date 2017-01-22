@@ -20,7 +20,7 @@ public class GGJ_Snowman : GGJ_EnemyController {
 
     private void throwSnowball()
     {
-        GameObject newSnowball = Instantiate(snowball, transform.FindChild("RightHand").transform.position, Quaternion.identity) as GameObject;
+        GameObject newSnowball = Instantiate(snowball, gameObject.transform.position, Quaternion.identity) as GameObject;
     }
 
 }

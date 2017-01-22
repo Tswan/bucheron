@@ -84,7 +84,7 @@ public class GGJ_Spawner : MonoBehaviour
         }
 
         // Check if special wave, immediately spawn lots of enemies
-        if (waveNumber % 3 == 0)
+        if (waveNumber % 5 == 0)
         {
             // Immediately spawn the max enemies AGAIN
             for (int i = 0; i < maxCount; i++)
@@ -93,12 +93,12 @@ public class GGJ_Spawner : MonoBehaviour
             }
         }
         // Check if super special wave, time to make enemies tougher
-        else if (waveNumber % 5 == 0)
+        if (waveNumber % 3 == 0)
         {
             _healthMultipler += HealthMultiplierIncrease;
         }
         // Check if even wave, time to make enemies harder
-        else if (waveNumber % 2 == 0)
+        if (waveNumber % 2 == 0)
         {
             _damageMultipler += DamageMultiplerIncrease;
         }
