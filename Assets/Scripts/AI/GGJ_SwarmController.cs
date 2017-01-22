@@ -25,7 +25,8 @@ public class GGJ_SwarmController : MonoBehaviour
         foreach (var enemyController in Enemies.Where(obj => obj.RigidBody != null))
         {
             // Check whether the enemy can see the player by attempting to raycast to the player
-            foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>())
+            foreach (var ggjPlayerController in GameObject.FindObjectsOfType<GGJ_PlayerController>()
+                .Where(obj => obj.State != GGJ_PlayerController.PlayerState.Dead))
             {
                 // Find direction between enemy and player
                 var enemyPosition = enemyController.RigidBody.transform.position;

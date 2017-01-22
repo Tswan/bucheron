@@ -1,10 +1,16 @@
 ﻿using System;
-using System.Collections;
+
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GGJ_PlayerController : GGJ_BaseController
 {
+    public enum PlayerState
+    {
+        Alive,
+        Dead,
+    };
+
     public Camera MainCamera;
     public int Currency;
     public GameObject Puck;
@@ -28,12 +34,16 @@ public class GGJ_PlayerController : GGJ_BaseController
     [HideInInspector]
     public AudioSource GenericAudioSource { get; private set; }
 
+    [HideInInspector]
+    public PlayerState State { get; private set; }
+
     private DateTime _startTime;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private AudioSource _runningAudioSource;
     private int _killCount;
     private int _waveNumber;
+    private Vector3 _startPosition;
 
     private void Awake()
     {
@@ -44,12 +54,9 @@ public class GGJ_PlayerController : GGJ_BaseController
     {
         base.Start();
 
-        _waveNumber = 0;
-        IncrementWave(1);
+        _startPosition = gameObject.transform.position;
+        ResetDefaults();
 
-        hpSlider.maxValue = GetComponent<Stats>().HealthMax;
-        hpSlider.value = GetComponent<Stats>().HealthMax;
-        _startTime = DateTime.UtcNow;
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -78,106 +85,142 @@ public class GGJ_PlayerController : GGJ_BaseController
         _runningAudioSource.volume = 0.25f;
     }
 
+    private void ResetDefaults()
+    {
+        State = PlayerState.Alive;
+        _waveNumber = 0;
+        IncrementWave(1);
+
+        hpSlider.maxValue = GetComponent<Stats>().HealthMax;
+        hpSlider.value = GetComponent<Stats>().HealthMax;
+        _startTime = DateTime.UtcNow;
+
+        gameObject.transform.position = _startPosition;
+    }
+
     private void Update()
     {
     }
 
     protected override void FixedUpdate()
     {
+        _animator.SetBool("isDead", false);
         _animator.SetBool("isRunning", false);
         _animator.SetBool("isSwinging", false);
         _animator.SetBool("isShooting", false);
         _animator.SetBool("isWaving", false);
         _animator.SetBool("isBlocking", false);
 
-        Money.text = Currency.ToString();
-        Pucks.text = Stats.Ammo.ToString();
+        switch (State)
+        {
+            case PlayerState.Dead:
+                _animator.SetBool("isDead", true);
+                if (Input.GetAxis("Start") > 0)
+                {
+                    ResetDefaults();
+                }
+                break;
 
-        base.FixedUpdate();
+            case PlayerState.Alive:
+                Money.text = Currency.ToString();
+                Pucks.text = Stats.Ammo.ToString();
 
-        // Check whether we're still running
-        if (!_animator.GetBool("isRunning"))
-        {
-            StopRunningAudio();
-        }
+                base.FixedUpdate();
 
-        if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
-        {
-            _animator.SetBool("isJumping", false);
-        }
+                // Check whether we're still running
+                if (!_animator.GetBool("isRunning"))
+                {
+                    StopRunningAudio();
+                }
 
-		if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false || Input.GetKey(KeyCode.M) &&  _animator.GetBool("isJumping") == false )
-        {
-            meleeAttack();
-        }
-		if (Input.GetAxis("B") > 0 || Input.GetKey(KeyCode.Space))
-        {
-            if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f && _animator.GetBool("isSwinging") == false)
-            {
-                jump();
-            }
-        }
-        if (Input.GetAxis("A") > 0)
-        {
-            //block();
-        }
-		if (Input.GetAxis("X") > 0 || Input.GetKey(KeyCode.N))
-        {
-            rangedAttack();
-        }
-        if (Input.GetAxis("L") > 0)
-        {
+                if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f)
+                {
+                    _animator.SetBool("isJumping", false);
+                }
 
-        }
-        if (Input.GetAxis("R") > 0)
-        {
-            wave();
-        }
-        if (Input.GetAxis("Start") > 0)
-        {
+                if (Input.GetAxis("Y") > 0 && _animator.GetBool("isJumping") == false || Input.GetKey(KeyCode.M) && _animator.GetBool("isJumping") == false)
+                {
+                    meleeAttack();
+                }
+                if (Input.GetAxis("B") > 0 || Input.GetKey(KeyCode.Space))
+                {
+                    if (RigidBody.velocity.y <= 0.01f && RigidBody.velocity.y >= -0.01f && _animator.GetBool("isSwinging") == false)
+                    {
+                        jump();
+                    }
+                }
+                if (Input.GetAxis("A") > 0)
+                {
+                    //block();
+                }
+                if (Input.GetAxis("X") > 0 || Input.GetKey(KeyCode.N))
+                {
+                    rangedAttack();
+                }
+                if (Input.GetAxis("L") > 0)
+                {
 
-        }
-        if (Input.GetAxis("Select") > 0)
-        {
+                }
+                if (Input.GetAxis("R") > 0)
+                {
+                    wave();
+                }
+                if (Input.GetAxis("Select") > 0)
+                {
 
+                }
+                break;
         }
     }
 
     public override void OnDamage(GameObject other, int damage)
     {
-
-        startHit();
-        if (_animator.GetBool("isBlocking") == true)
+        // Check the state
+        if (State != PlayerState.Dead)
         {
-            damage = 0;
+            startHit();
+            if (!_animator.GetBool("isBlocking"))
+            {
+                damage = 0;
+            }
+
+            // DEBUG: Log the damage
+            Debug.Log(string.Format("Damaging player for {0} damage.", damage));
+
+            // TODO: Play audio
+            Debug.Log("TODO: Play audio for damaging player.");
+
+            // Decrement the HP slider
+            hpSlider.value -= damage;
+
+            // Shake the camera for an amount of time dependant on the damage
+            var cameraShake = MainCamera.GetComponent<GGJ_CameraShake>();
+            if (cameraShake != null)
+            {
+                cameraShake.ShakeTime = damage * 0.1f;
+            }
         }
-
-        // DEBUG: Log the damage
-        Debug.Log(string.Format("Damaging player for {0} damage.", damage));
-
-        // TODO: Play audio
-        Debug.Log("TODO: Play audio for damaging player.");
-
-
-        hpSlider.value -= damage;
-
-        // Shake the camera for an amount of time dependant on the damage
-        //MainCamera.GetComponent<GGJ_CameraShake>().ShakeTime = damage * 0.1f;
     }
 
     public override void OnKill(GameObject other)
     {
-        // DEBUG: Log killing player
-        Debug.Log("Player has been killed.");
+        // Check the state 
+        if (State != PlayerState.Dead)
+        {
+            // DEBUG: Log killing player
+            Debug.Log("Player has been killed.");
 
-        // TODO: Play audio
-        Debug.Log("TODO: Player audio for player dying.");
+            // TODO: Play audio
+            Debug.Log("TODO: Player audio for player dying.");
 
-        // TODO: Handle player death
-        Debug.Log("TODO: Handle player death.");
-		if (_animator.GetBool ("isDead") == false)
-			_animator.SetBool("isDead", true);
-
+            // Handle player death
+            State = PlayerState.Dead;
+            _animator.SetBool("isDead", true);
+            WaveAnnouncement.text = string.Format("You Have Died, Press Start...");
+            var fadeTextInOut = WaveAnnouncement.gameObject.AddComponent<GGJ_FadeTextInOut>();
+            fadeTextInOut.FadeTime = 1.0f;
+            fadeTextInOut.LifeTime = float.MaxValue;
+        }
     }
 
     private void jump()
@@ -249,14 +292,14 @@ public class GGJ_PlayerController : GGJ_BaseController
 
     private void startHit()
     {
-		if(_animator.GetBool("isDead") == false)
-       		 _animator.SetBool("isHit", true);
+        if (_animator.GetBool("isDead") == false)
+            _animator.SetBool("isHit", true);
     }
 
     private void endHit()
     {
-		if(Stats._healthCurrent > 0)
-       		_animator.SetBool("isHit", false);
+        if (Stats._healthCurrent > 0)
+            _animator.SetBool("isHit", false);
     }
 
     protected override Vector3 GetMovementDirection()
