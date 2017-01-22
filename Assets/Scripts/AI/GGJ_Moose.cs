@@ -36,24 +36,23 @@ public class GGJ_Moose : GGJ_EnemyController
     }
 
     // Update is called once per frame
-<<<<<<< HEAD
+
     protected override void FixedUpdate()
-    {
-=======
+	{
+
+	}
+
     private void Update()
     {
         _chargeTimer += Time.deltaTime;
 
->>>>>>> origin/master
         myAnim.SetBool("isIdle", false);
         myAnim.SetBool("isAttacking", false);
         myAnim.SetBool("isWalking", false);
 
-<<<<<<< HEAD
+
         base.FixedUpdate();
 
-=======
->>>>>>> origin/master
         switch (_state)
         {
             case AIState.Idle:
@@ -67,7 +66,7 @@ public class GGJ_Moose : GGJ_EnemyController
                 break;
 
             case AIState.PlayerSeen:
-<<<<<<< HEAD
+				
                 _chargeTimer += Time.fixedDeltaTime;
 
                 if (_chargeTimer > MaxChargeTime)
@@ -189,10 +188,8 @@ public class GGJ_Moose : GGJ_EnemyController
     public void attack()
     {
         return;
-<<<<<<< HEAD
-=======
         print("MOOOOSE");
->>>>>>> origin/master
+
         Vector3 targetPos = GameObject.FindGameObjectWithTag("Player").transform.position;
         Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, targetPos.z), 20);
     }
