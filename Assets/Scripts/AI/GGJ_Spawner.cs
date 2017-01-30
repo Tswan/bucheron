@@ -127,4 +127,11 @@ public class GGJ_Spawner : MonoBehaviour
         enemyStats.HealthMax = (int)Math.Round(enemyStats.HealthMax * _healthMultipler);
         enemyStats._healthCurrent = enemyStats.HealthMax;
     }
+
+	public void resetMultipliers()
+	{
+		_timeElapsedSinceLastSpawn = 0.0f;
+		_damageMultipler = 1.0f;
+		_healthMultipler = 1.0f;
+	}
 }
