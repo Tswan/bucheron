@@ -330,22 +330,23 @@ public class GGJ_PlayerController : GGJ_BaseController
                 _animator.SetBool("isRunning", true);
                 diection += Vector3.left;
             }
-
-            if (Input.GetAxis("Vertical") < -0.1f)
+			else if (Input.GetAxis("Vertical") < -0.1f)
             {
                 //print ("UP");
                 //z = moveSpeed * Time.fixedDeltaTime;
                 //rb.AddForce (Vector3.forward * moveSpeed);
                 _animator.SetBool("isRunning", true);
-                diection += Vector3.forward;
+				diection += Vector3.forward;
+
             }
-            else if (Input.GetAxis("Vertical") > 0.1f)
+			else if (Input.GetAxis("Vertical") > 0.1f)
             {
                 //print ("DOWN");
                 //z = -moveSpeed * Time.fixedDeltaTime;
                 //rb.AddForce (-Vector3.forward * moveSpeed);
                 _animator.SetBool("isRunning", true);
                 diection += Vector3.back;
+
             }
 
             return Vector3.Normalize(diection);
