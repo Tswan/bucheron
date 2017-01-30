@@ -35,6 +35,7 @@ public class puck : MonoBehaviour {
 
     private void explode(GameObject target)
     {
+        target.GetComponent<Stats>().TakeDamage(GameObject.FindObjectOfType<GGJ_PlayerController>().gameObject, 5);
         target.GetComponent<Rigidbody>().AddExplosionForce(500, transform.position, 500.0f, 10.0f);
         Destroy(gameObject);
 

@@ -144,10 +144,11 @@ public class GGJ_Moose : GGJ_EnemyController
         if (_state == AIState.Charging && _chargeTimer > ChargeWaitTime)
         {
             // Only damage a player if we're charging
-            var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
-            if (playerController != null)
+            var controller = other.gameObject.GetComponent<GGJ_BaseController>();
+            if (controller is GGJ_PlayerController)
             {
                 // Check the last time we damaged the player
+                var playerController = controller as GGJ_PlayerController;
                 if ((DateTime.UtcNow - _timeSinceLastPlayerDamage).TotalSeconds > SecondsBetweenAttacks)
                 {
                     // Reset the damage time
@@ -159,6 +160,10 @@ public class GGJ_Moose : GGJ_EnemyController
 
                 // Knock the player back
                 playerController.RigidBody.AddForce(Vector3.Normalize(RigidBody.velocity) * 7.5f, ForceMode.Impulse);
+            }
+            else if (controller is GGJ_EnemyController)
+            {
+                (controller as GGJ_EnemyController).Stats.TakeDamage(gameObject, int.MaxValue);
             }
         }
     }

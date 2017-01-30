@@ -54,11 +54,11 @@ public class GGJ_PlayerController : GGJ_BaseController
     {
         base.Start();
 
-        _startPosition = gameObject.transform.position;
-        ResetDefaults();
-
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        _startPosition = gameObject.transform.position;
+        ResetDefaults();
 
         OnHitAudioSource = gameObject.AddComponent<AudioSource>();
         OnHitAudioSource.clip = OnHitAudio;
@@ -91,15 +91,18 @@ public class GGJ_PlayerController : GGJ_BaseController
         _waveNumber = 0;
         IncrementWave(1);
 
-        hpSlider.maxValue = GetComponent<Stats>().HealthMax;
-        hpSlider.value = GetComponent<Stats>().HealthMax;
+        hpSlider.maxValue = Stats.HealthMax;
+        hpSlider.value = Stats.HealthMax;
+        Stats.HealthCurrent = Stats.HealthMax;
         _startTime = DateTime.UtcNow;
 
         gameObject.transform.position = _startPosition;
+        chill();
     }
 
     private void Update()
     {
+        hpSlider.value = Stats.HealthCurrent;
     }
 
     protected override void FixedUpdate()
@@ -191,7 +194,7 @@ public class GGJ_PlayerController : GGJ_BaseController
             Debug.Log("TODO: Play audio for damaging player.");
 
             // Decrement the HP slider
-			hpSlider.value = Stats._healthCurrent;//damage;
+			hpSlider.value = Stats.HealthCurrent;//damage;
 
             // Shake the camera for an amount of time dependant on the damage
             var cameraShake = MainCamera.GetComponent<GGJ_CameraShake>();
@@ -304,7 +307,7 @@ public class GGJ_PlayerController : GGJ_BaseController
 
     private void endHit()
     {
-        if (Stats._healthCurrent > 0)
+        if (Stats.HealthCurrent > 0)
             _animator.SetBool("isHit", false);
     }
 
@@ -406,16 +409,16 @@ public class GGJ_PlayerController : GGJ_BaseController
     public void buyCoffee()
     {
 
-        for (float x = Stats._healthCurrent / 10; x < 10; x++)
+        for (float x = Stats.HealthCurrent / 10; x < 10; x++)
         {
 
             if (Currency > 0)
             {
                 Currency -= 1;
-                Stats._healthCurrent += 10;
-                if (Stats._healthCurrent > Stats.HealthMax)
+                Stats.HealthCurrent += 10;
+                if (Stats.HealthCurrent > Stats.HealthMax)
                 {
-                    Stats._healthCurrent = Stats.HealthMax;
+                    Stats.HealthCurrent = Stats.HealthMax;
                 }
             }
         }

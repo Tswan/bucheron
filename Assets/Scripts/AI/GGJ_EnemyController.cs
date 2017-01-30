@@ -25,13 +25,20 @@ public class GGJ_EnemyController : GGJ_BaseController
     {
         // Call the sound effect of the enemy being hit
         var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
-        playerController.GetComponent<AudioSource>().PlayOneShot(playerController.OnHitAudio, 0.5f);
+        if (playerController != null)
+        {
+            playerController.OnHitAudioSource.Play();
+        }
     }
 
     public override void OnKill(GameObject other)
     {
         // Increment the player controller that killed this enemy
-        other.gameObject.GetComponent<GGJ_PlayerController>().IncrementKill(1);
+        var playerController = other.gameObject.GetComponent<GGJ_PlayerController>();
+        if (playerController != null)
+        {
+            playerController.IncrementKill(1);
+        }
 
         // Remove this from the swarm controller
         SwarmController.Enemies.Remove(this);
